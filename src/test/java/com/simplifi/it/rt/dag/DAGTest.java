@@ -20,7 +20,11 @@ public class DAGTest
   @Test
   public void containsEdgeTest()
   {
+    DAG<String> dag = buildTestDAG1();
 
+    Assert.assertTrue(dag.containsEdge(new Edge<>("1", "3")));
+    Assert.assertFalse(dag.containsEdge(new Edge<>("1", "6")));
+    Assert.assertFalse(dag.containsEdge(new Edge<>("1", "10")));
   }
 
   /*
@@ -41,7 +45,6 @@ public class DAGTest
     DAG.Error error = dag.addEdge(new Edge<>("1", "2"));
     Assert.assertNull(error);
     error = dag.addEdge(new Edge<>("1", "3"));
-    System.out.println(error);
     Assert.assertNull(error);
     error = dag.addEdge(new Edge<>("2", "4"));
     Assert.assertNull(error);
