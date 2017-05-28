@@ -1,7 +1,11 @@
 package com.simplifi.it.rt.release;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import com.simplifi.it.rt.parse.ParseError;
+import com.simplifi.it.rt.parse.ParseResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +59,14 @@ public class ReleaseConfig
     return repoConfigs.hashCode();
   }
 
-  public static ReleaseConfig parse(InputStream dataInputStream) throws IOException {
+  public static ParseResult<ReleaseConfig> parse(InputStream dataInputStream) {
     ObjectMapper om = new ObjectMapper();
-    return om.readValue(dataInputStream, ReleaseConfig.class);
+
+    try {
+      ReleaseConfig releaseConfig = om.readValue(dataInputStream, ReleaseConfig.class);
+      return new ParseResult<ReleaseConfig>(releaseConfig);
+    } catch (IOException e) {
+      return new ParseResult<ReleaseConfig>(new ParseError(e));
+    }
   }
 }
