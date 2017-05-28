@@ -1,7 +1,12 @@
 package com.simplifi.it.rt.build;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import com.simplifi.it.rt.parse.ParseError;
+import com.simplifi.it.rt.parse.ParseResult;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -53,5 +58,17 @@ public class BuildConfig
   public int hashCode()
   {
     return repoConfigs.hashCode();
+  }
+
+  public static ParseResult<BuildConfig> parse(InputStream dataInputStream)
+  {
+    ObjectMapper om = new ObjectMapper();
+
+    try {
+      BuildConfig buildConfig = om.readValue(dataInputStream, BuildConfig.class);
+      return new ParseResult<>(buildConfig);
+    } catch (IOException e) {
+      return new ParseResult<>(new ParseError(e));
+    }
   }
 }

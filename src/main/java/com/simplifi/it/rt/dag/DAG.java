@@ -29,12 +29,18 @@ public class DAG<T> implements Cloneable
     return srcToDests.containsKey(node) || srcToDests.containsValue(node);
   }
 
-  public void addEdge(Edge<T> edge)
+  public Error addEdge(Edge<T> edge)
   {
-    Preconditions.checkArgument(!containsEdge(edge));
-    Preconditions.checkArgument(!hasPath(edge.getDest(), edge.getSrc()));
+    if(containsEdge(edge)) {
+      return new Error();
+    }
+
+    if (hasPath(edge.getDest(), edge.getSrc())) {
+      return new Error();
+    }
 
     srcToDests.put(edge.getSrc(), edge.getDest());
+    return null;
   }
 
   public boolean removeEdge(Edge<T> edge)
@@ -139,5 +145,24 @@ public class DAG<T> implements Cloneable
   public int hashCode()
   {
     return srcToDests.hashCode();
+  }
+
+  public static class Error
+  {
+    private String message;
+
+    public Error()
+    {
+    }
+
+    public Error(String message)
+    {
+      this.message = Preconditions.checkNotNull(message);
+    }
+
+    public String getMessage()
+    {
+      return message;
+    }
   }
 }

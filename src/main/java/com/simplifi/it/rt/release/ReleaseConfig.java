@@ -64,9 +64,9 @@ public class ReleaseConfig
 
     try {
       ReleaseConfig releaseConfig = om.readValue(dataInputStream, ReleaseConfig.class);
-      return new ParseResult<ReleaseConfig>(releaseConfig);
+      return new ParseResult<>(releaseConfig);
     } catch (IOException e) {
-      return new ParseResult<ReleaseConfig>(new ParseError(e));
+      return new ParseResult<>(new ParseError(e));
     }
   }
 }
