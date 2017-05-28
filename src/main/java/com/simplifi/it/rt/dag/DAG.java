@@ -73,6 +73,19 @@ public class DAG<T> implements Cloneable
     return roots;
   }
 
+  public Set<Edge<T>> getEdges()
+  {
+    Set<Edge<T>> edgeSet = Sets.newHashSet();
+
+    srcToDests.keySet().forEach(src -> {
+      srcToDests.get(src).forEach(dest -> {
+        edgeSet.add(new Edge<>(src, dest));
+      });
+    });
+
+    return edgeSet;
+  }
+
   public List<T> inOrderTraversal(Comparator<T> comparator)
   {
     Preconditions.checkNotNull(comparator);
