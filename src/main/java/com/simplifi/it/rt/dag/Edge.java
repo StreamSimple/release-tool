@@ -1,5 +1,7 @@
 package com.simplifi.it.rt.dag;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Created by tfarkas on 5/27/17.
  */
@@ -9,6 +11,8 @@ public class Edge<T> {
 
   public Edge(T src, T dest)
   {
+    this.src = Preconditions.checkNotNull(src);
+    this.dest = Preconditions.checkNotNull(dest);
   }
 
   public T getSrc()
@@ -19,6 +23,15 @@ public class Edge<T> {
   public T getDest()
   {
     return dest;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "Edge{" +
+      "src=" + src +
+      ", dest=" + dest +
+      '}';
   }
 
   @Override

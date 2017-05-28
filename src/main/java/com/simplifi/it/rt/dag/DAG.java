@@ -32,11 +32,11 @@ public class DAG<T> implements Cloneable
   public Error addEdge(Edge<T> edge)
   {
     if(containsEdge(edge)) {
-      return new Error();
+      return new Error("Contains edge: " + edge);
     }
 
     if (hasPath(edge.getDest(), edge.getSrc())) {
-      return new Error();
+      return new Error("Has path from " + edge.getDest() + " to " + edge.getSrc());
     }
 
     srcToDests.put(edge.getSrc(), edge.getDest());
@@ -163,6 +163,14 @@ public class DAG<T> implements Cloneable
     public String getMessage()
     {
       return message;
+    }
+
+    @Override
+    public String toString()
+    {
+      return "Error{" +
+        "message='" + message + '\'' +
+        '}';
     }
   }
 }
