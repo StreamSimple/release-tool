@@ -13,25 +13,26 @@ import java.util.*;
  */
 public class DAG<T> implements Cloneable
 {
+  private Set<T> nodes = Sets.newHashSet();
   private SetMultimap<T, T> srcToDests = HashMultimap.create();
 
   public DAG()
   {
   }
 
-  public boolean containsEdge(Edge<T> edge)
+  public boolean contains(Edge<T> edge)
   {
     return srcToDests.containsEntry(edge.getSrc(), edge.getDest());
   }
 
   public boolean contains(T node)
   {
-    return srcToDests.containsKey(node) || srcToDests.containsValue(node);
+    return nodes.contains(node);
   }
 
   public Error addEdge(Edge<T> edge)
   {
-    if(containsEdge(edge)) {
+    if(contains(edge)) {
       return new Error("Contains edge: " + edge);
     }
 
@@ -39,6 +40,8 @@ public class DAG<T> implements Cloneable
       return new Error("Has path from " + edge.getDest() + " to " + edge.getSrc());
     }
 
+    nodes.add(edge.getSrc());
+    nodes.add(edge.getDest());
     srcToDests.put(edge.getSrc(), edge.getDest());
     return null;
   }
@@ -46,6 +49,22 @@ public class DAG<T> implements Cloneable
   public boolean removeEdge(Edge<T> edge)
   {
     return srcToDests.remove(edge.getSrc(), edge.getDest());
+  }
+
+  public boolean removeNode(T node)
+  {
+    if (!nodes.contains(node)) {
+      return false;
+    }
+
+    nodes.remove(node);
+    Set<T> dests = srcToDests.get(node);
+
+    for (T dest: dests) {
+      srcToDests.remove(node, dest);
+    }
+
+    return true;
   }
 
   public Set<T> getChildNodes(T node)
@@ -109,6 +128,8 @@ public class DAG<T> implements Cloneable
           currentNodes.add(candidateNode);
         }
       }
+
+      clonedDag.removeNode(currentNode);
     }
 
     return topologicalSort;

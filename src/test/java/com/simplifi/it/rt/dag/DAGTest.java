@@ -25,9 +25,9 @@ public class DAGTest
   {
     DAG<String> dag = buildTestDAG1();
 
-    Assert.assertTrue(dag.containsEdge(new Edge<>("1", "3")));
-    Assert.assertFalse(dag.containsEdge(new Edge<>("1", "6")));
-    Assert.assertFalse(dag.containsEdge(new Edge<>("1", "10")));
+    Assert.assertTrue(dag.contains(new Edge<>("1", "3")));
+    Assert.assertFalse(dag.contains(new Edge<>("1", "6")));
+    Assert.assertFalse(dag.contains(new Edge<>("1", "10")));
   }
 
   @Test
@@ -47,15 +47,21 @@ public class DAGTest
 
     Assert.assertEquals(actualEdges, expectedEdges);
   }
-  
+
+  @Test
+  public void inOrderTraversal()
+  {
+
+  }
+
   @Test
   public void removeEdgeTest()
   {
     DAG<String> dag = buildTestDAG1();
 
-    Assert.assertTrue(dag.containsEdge(new Edge<>("1", "3")));
+    Assert.assertTrue(dag.contains(new Edge<>("1", "3")));
     Assert.assertTrue(dag.removeEdge(new Edge<>("1", "3")));
-    Assert.assertFalse(dag.containsEdge(new Edge<>("1", "3")));
+    Assert.assertFalse(dag.contains(new Edge<>("1", "3")));
 
     Set<Edge<String>> actualEdges = dag.getEdges();
     Set<Edge<String>> expectedEdges = Sets.newHashSet(
