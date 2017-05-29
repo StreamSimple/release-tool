@@ -1,8 +1,7 @@
 package com.simplifi.it.rt.release;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 import com.simplifi.it.rt.parse.ParseError;
 import com.simplifi.it.rt.parse.ParseResult;
@@ -61,6 +60,7 @@ public class ReleaseConfig
 
   public static ParseResult<ReleaseConfig> parse(InputStream dataInputStream) {
     ObjectMapper om = new ObjectMapper();
+    om.registerModule(new Jdk8Module());
 
     try {
       ReleaseConfig releaseConfig = om.readValue(dataInputStream, ReleaseConfig.class);

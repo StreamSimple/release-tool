@@ -3,6 +3,6 @@
     {"path":"/repos/myRepo1", "mainBranch":"test1"},
     {"path":"/repos/myRepo2"},
     {"path":"/repos/myRepo3", "mainBranch":"master"},
-    {"path":"/repos/myRepo4", "mainBranch":"test2"}
+    {"path":"/repos/myRepo4", "mainBranch":"test2", "releaseCommand":"echo 'Hello World'"}
   ]
 }

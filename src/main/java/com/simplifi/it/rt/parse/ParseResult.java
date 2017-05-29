@@ -16,7 +16,6 @@ public class ParseResult<T> {
 
   public ParseResult(ParseError error)
   {
-    this.value = Preconditions.checkNotNull(value);
     this.error = Preconditions.checkNotNull(error);
   }
 

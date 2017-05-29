@@ -1,6 +1,7 @@
 package com.simplifi.it.rt.build;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 import com.simplifi.it.rt.parse.ParseError;
 import com.simplifi.it.rt.parse.ParseResult;
@@ -63,6 +64,7 @@ public class BuildConfig
   public static ParseResult<BuildConfig> parse(InputStream dataInputStream)
   {
     ObjectMapper om = new ObjectMapper();
+    om.registerModule(new Jdk8Module());
 
     try {
       BuildConfig buildConfig = om.readValue(dataInputStream, BuildConfig.class);
