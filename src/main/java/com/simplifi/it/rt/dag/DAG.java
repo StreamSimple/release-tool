@@ -58,7 +58,7 @@ public class DAG<T> implements Cloneable
     }
 
     nodes.remove(node);
-    Set<T> dests = srcToDests.get(node);
+    Set<T> dests = Sets.newHashSet(srcToDests.get(node));
 
     for (T dest: dests) {
       srcToDests.remove(node, dest);
@@ -83,11 +83,11 @@ public class DAG<T> implements Cloneable
   {
     Set<T> roots = Sets.newHashSet();
 
-    for (T node: srcToDests.keySet()) {
+    nodes.forEach(node -> {
       if (!hasIncomingEdges(node)) {
         roots.add(node);
       }
-    }
+    });
 
     return roots;
   }

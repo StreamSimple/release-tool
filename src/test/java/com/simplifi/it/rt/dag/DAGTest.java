@@ -49,7 +49,30 @@ public class DAGTest
   }
 
   @Test
-  public void inOrderTraversal()
+  public void simpleGetRootsTest()
+  {
+    DAG<String> dag = buildTestDAG1();
+
+    Set<String> expectedRoots = Sets.newHashSet("1");
+
+    Assert.assertEquals(expectedRoots, dag.getRoots());
+  }
+
+  @Test
+  public void simpleRemoveNodeTest()
+  {
+    DAG<String> dag = buildTestDAG1();
+
+    Assert.assertTrue(dag.removeNode("1"));
+    Assert.assertFalse(dag.removeNode("1"));
+    Assert.assertFalse(dag.removeNode("10"));
+    Assert.assertFalse(dag.contains("1"));
+    Assert.assertFalse(dag.contains(new Edge("1", "2")));
+    Assert.assertFalse(dag.contains(new Edge("1", "3")));
+  }
+
+  @Test
+  public void simpleInOrderTraversalTest()
   {
 
   }
