@@ -1,9 +1,12 @@
 package com.simplifi.it.rt.dag;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -74,7 +77,17 @@ public class DAGTest
   @Test
   public void simpleInOrderTraversalTest()
   {
+    DAG<String> dag = buildTestDAG1();
 
+    List<String> nodes = dag.inOrderTraversal(new Comparator<String>() {
+      @Override
+      public int compare(String o1, String o2) {
+        return o1.compareTo(o2);
+      }
+    });
+
+    List<String> expectedOrdering = Lists.newArrayList("1", "2", "3", "4", "5", "6");
+    Assert.assertEquals(nodes, expectedOrdering);
   }
 
   @Test

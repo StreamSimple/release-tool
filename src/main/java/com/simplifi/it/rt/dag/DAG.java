@@ -105,6 +105,11 @@ public class DAG<T> implements Cloneable
     return edgeSet;
   }
 
+  public Set<T> getNodes()
+  {
+    return Sets.newHashSet(nodes);
+  }
+
   public List<T> inOrderTraversal(Comparator<T> comparator)
   {
     Preconditions.checkNotNull(comparator);
@@ -139,7 +144,15 @@ public class DAG<T> implements Cloneable
   public Object clone()
   {
     DAG<T> dag = new DAG<T>();
-    dag.srcToDests = srcToDests;
+    dag.srcToDests = HashMultimap.create();
+
+    srcToDests.keySet().forEach(key -> {
+      srcToDests.get(key).forEach(value -> {
+        dag.srcToDests.put(key, value);
+      });
+    });
+
+    dag.nodes = Sets.newHashSet(nodes);
     return dag;
   }
 
