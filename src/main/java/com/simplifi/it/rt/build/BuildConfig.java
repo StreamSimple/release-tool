@@ -160,9 +160,14 @@ public class BuildConfig
     try {
       BuildConfig buildConfig = om.readValue(dataInputStream, BuildConfig.class);
 
+      Pair<DAG<RepoConfig>, ParseError> dagPair = createRepoConfigDAG(buildConfig.getRepoConfigs());
+      ParseError parseError = dagPair.getRight();
 
-
-      return new ParseResult<>(buildConfig);
+      if (parseError != null) {
+        return new ParseResult<BuildConfig>(parseError);
+      } else {
+        return new ParseResult<>(buildConfig);
+      }
     } catch (IOException e) {
       return new ParseResult<>(new ParseError(e));
     }
