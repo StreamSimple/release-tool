@@ -2,11 +2,9 @@ package com.simplifi.it.rt.build;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by tfarkas on 5/27/17.
- */
 public class RepoConfig
 {
   private String name;
@@ -84,5 +82,18 @@ public class RepoConfig
     result = 31 * result + path.hashCode();
     result = 31 * result + dependencies.hashCode();
     return result;
+  }
+
+  public static class NameComparator implements Comparator<RepoConfig> {
+    public static final NameComparator INSTANCE = new NameComparator();
+
+    private NameComparator() {
+      // Singleton
+    }
+
+    @Override
+    public int compare(RepoConfig configA, RepoConfig configB) {
+      return configA.getName().compareTo(configB.getName());
+    }
   }
 }

@@ -2,9 +2,6 @@ package com.simplifi.it.rt.dag;
 
 import com.google.common.base.Preconditions;
 
-/**
- * Created by tfarkas on 5/27/17.
- */
 public class Edge<T> {
   private T src;
   private T dest;

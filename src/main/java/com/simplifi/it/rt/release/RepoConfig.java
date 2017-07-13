@@ -4,9 +4,6 @@ import com.google.common.base.Preconditions;
 
 import java.util.Optional;
 
-/**
- * Created by tfarkas on 5/27/17.
- */
 public class RepoConfig
 {
   public static final String DEFAULT_MAIN_BRANCH = "master";

@@ -8,9 +8,6 @@ import com.google.common.collect.Sets;
 
 import java.util.*;
 
-/**
- * Created by tfarkas on 5/27/17.
- */
 public class DAG<T> implements Cloneable
 {
   private Set<T> nodes = Sets.newHashSet();

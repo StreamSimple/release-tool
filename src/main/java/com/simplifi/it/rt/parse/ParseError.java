@@ -2,9 +2,6 @@ package com.simplifi.it.rt.parse;
 
 import com.google.common.base.Preconditions;
 
-/**
- * Created by tfarkas on 5/28/17.
- */
 public class ParseError
 {
   private String message;
@@ -34,5 +31,13 @@ public class ParseError
   public Exception getException()
   {
     return exception;
+  }
+
+  @Override
+  public String toString() {
+    return "ParseError{" +
+      "message='" + message + '\'' +
+      ", exception=" + exception +
+      '}';
   }
 }

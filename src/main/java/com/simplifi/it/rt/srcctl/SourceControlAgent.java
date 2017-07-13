@@ -2,9 +2,6 @@ package com.simplifi.it.rt.srcctl;
 
 import com.google.common.base.Preconditions;
 
-/**
- * Created by tfarkas on 5/28/17.
- */
 public interface SourceControlAgent
 {
   Error checkoutBranch(String branch);
