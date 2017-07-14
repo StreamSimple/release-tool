@@ -2,6 +2,7 @@ package com.simplifi.it.rt.dag;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.simplifi.it.javautil.err.ReturnError;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,9 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by tfarkas on 5/28/17.
- */
 public class DAGTest
 {
   @Test
@@ -127,7 +125,7 @@ public class DAGTest
   {
     DAG<String> dag = new DAG<>();
 
-    DAG.Error error = dag.addEdge(new Edge<>("1", "2"));
+    ReturnError error = dag.addEdge(new Edge<>("1", "2"));
     Assert.assertNull(error);
     error = dag.addEdge(new Edge<>("2", "4"));
     Assert.assertNull(error);
@@ -150,7 +148,7 @@ public class DAGTest
   {
     DAG<String> dag = new DAG<>();
 
-    DAG.Error error = dag.addEdge(new Edge<>("1", "2"));
+    ReturnError error = dag.addEdge(new Edge<>("1", "2"));
     Assert.assertNull(error);
     error = dag.addEdge(new Edge<>("1", "3"));
     Assert.assertNull(error);

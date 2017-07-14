@@ -5,6 +5,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
+import com.simplifi.it.javautil.err.ReturnError;
+import com.simplifi.it.javautil.err.ReturnErrorImpl;
 
 import java.util.*;
 
@@ -27,14 +29,14 @@ public class DAG<T> implements Cloneable
     return nodes.contains(node);
   }
 
-  public Error addEdge(Edge<T> edge)
+  public ReturnError addEdge(Edge<T> edge)
   {
     if(contains(edge)) {
-      return new Error("Contains edge: " + edge);
+      return new ReturnErrorImpl("Contains edge: " + edge);
     }
 
     if (hasPath(edge.getDest(), edge.getSrc())) {
-      return new Error("Has path from " + edge.getDest() + " to " + edge.getSrc());
+      return new ReturnErrorImpl("Has path from " + edge.getDest() + " to " + edge.getSrc());
     }
 
     nodes.add(edge.getSrc());
@@ -193,32 +195,5 @@ public class DAG<T> implements Cloneable
   public int hashCode()
   {
     return srcToDests.hashCode();
-  }
-
-  public static class Error
-  {
-    private String message;
-
-    public Error()
-    {
-    }
-
-    public Error(String message)
-    {
-      this.message = Preconditions.checkNotNull(message);
-    }
-
-    public String getMessage()
-    {
-      return message;
-    }
-
-    @Override
-    public String toString()
-    {
-      return "Error{" +
-        "message='" + message + '\'' +
-        '}';
-    }
   }
 }

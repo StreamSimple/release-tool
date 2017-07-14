@@ -5,6 +5,8 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.simplifi.it.javautil.err.ReturnError;
+import com.simplifi.it.javautil.err.ReturnErrorImpl;
 import com.simplifi.it.rt.dag.DAG;
 import com.simplifi.it.rt.dag.Edge;
 import com.simplifi.it.rt.parse.ParseError;
@@ -126,7 +128,7 @@ public class BuildConfig
     }
 
     DAG<RepoConfig> dag = new DAG<>();
-    List<DAG.Error> dagErrors = Lists.newArrayList();
+    List<ReturnError> dagErrors = Lists.newArrayList();
 
     repoConfigs.forEach(repoConfig -> {
       repoConfig.getDependencies().forEach(depRepoConfigName -> {
@@ -134,9 +136,9 @@ public class BuildConfig
 
         if (depRepoConfig == null) {
           String errorMessage = "The repo \"" + depRepoConfigName + "\" does not exist.";
-          dagErrors.add(new DAG.Error(errorMessage));
+          dagErrors.add(new ReturnErrorImpl(errorMessage));
         } else {
-          DAG.Error dagError = dag.addEdge(new Edge<>(repoConfig, depRepoConfig));
+          ReturnError dagError = dag.addEdge(new Edge<>(repoConfig, depRepoConfig));
 
           if (dagError != null) {
             System.out.println("Dag error " + dagError);
