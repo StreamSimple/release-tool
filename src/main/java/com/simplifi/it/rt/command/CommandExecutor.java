@@ -1,5 +1,7 @@
 package com.simplifi.it.rt.command;
 
+import com.simplifi.it.javautil.err.ReturnError;
+
 public interface CommandExecutor {
-  int execute(String workingDirectory, String command);
+  ReturnError execute(String workingDirectory, String command);
 }
