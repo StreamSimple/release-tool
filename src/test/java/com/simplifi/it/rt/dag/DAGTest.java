@@ -111,6 +111,30 @@ public class DAGTest
     Assert.assertEquals(actualEdges, expectedEdges);
   }
 
+  @Test
+  public void hasPathTest()
+  {
+    DAG<String> dag = new DAG<>();
+
+    dag.addEdge(new Edge<>("1", "2"));
+    dag.addEdge(new Edge<>("2", "4"));
+
+    Assert.assertTrue(dag.hasPath("1", "4"));
+  }
+
+  @Test
+  public void addEdgeCycleTest()
+  {
+    DAG<String> dag = new DAG<>();
+
+    DAG.Error error = dag.addEdge(new Edge<>("1", "2"));
+    Assert.assertNull(error);
+    error = dag.addEdge(new Edge<>("2", "4"));
+    Assert.assertNull(error);
+    error = dag.addEdge(new Edge<>("4", "1"));
+    Assert.assertNotNull(error);
+  }
+
   /*
    *               1
    *              / \

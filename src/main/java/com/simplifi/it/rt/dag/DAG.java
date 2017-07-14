@@ -165,6 +165,10 @@ public class DAG<T> implements Cloneable
 
     Set<T> nextNodes = srcToDests.get(src);
 
+    if (nextNodes.contains(dest)) {
+      return true;
+    }
+
     for (T nextNode: nextNodes) {
       if (hasPath(nextNode, dest)) {
         return true;

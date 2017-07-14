@@ -136,7 +136,12 @@ public class BuildConfig
           String errorMessage = "The repo \"" + depRepoConfigName + "\" does not exist.";
           dagErrors.add(new DAG.Error(errorMessage));
         } else {
-          dag.addEdge(new Edge<>(repoConfig, depRepoConfig));
+          DAG.Error dagError = dag.addEdge(new Edge<>(repoConfig, depRepoConfig));
+
+          if (dagError != null) {
+            System.out.println("Dag error " + dagError);
+            dagErrors.add(dagError);
+          }
         }
       });
     });
