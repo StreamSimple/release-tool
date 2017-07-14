@@ -9,7 +9,7 @@ import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.javautil.err.ReturnErrorImpl;
 import com.simplifi.it.rt.dag.DAG;
 import com.simplifi.it.rt.dag.Edge;
-import com.simplifi.it.rt.parse.ParseError;
+import com.simplifi.it.rt.parse.ParseException;
 import com.simplifi.it.rt.parse.ParseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -49,9 +49,9 @@ public class BuildConfig
   }
 
   public DAG<RepoConfig> toDAG() {
-    Pair<DAG<RepoConfig>, ParseError> dagPair = createRepoConfigDAG(repoConfigs);
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = createRepoConfigDAG(repoConfigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
-    ParseError parseError = dagPair.getRight();
+    ReturnError parseError = dagPair.getRight();
 
     if (parseError != null) {
       throw new IllegalStateException(parseError.getMessage());
@@ -86,7 +86,7 @@ public class BuildConfig
   }
 
 
-  public static Pair<Map<String, RepoConfig>, ParseError> createRepoConfigMap(List<RepoConfig> repoConfigs) {
+  public static Pair<Map<String, RepoConfig>, ReturnError> createRepoConfigMap(List<RepoConfig> repoConfigs) {
     Map<String, RepoConfig> repoConfigMap = Maps.newHashMap();
     List<RepoConfig> duplicateRepoConfigs = Lists.newArrayList();
 
@@ -100,7 +100,7 @@ public class BuildConfig
       repoConfigMap.put(repoName, repoConfig);
     });
 
-    ParseError parseError = null;
+    ReturnError parseError = null;
 
     if (!duplicateRepoConfigs.isEmpty()) {
       List<String> repoNames = duplicateRepoConfigs.
@@ -111,17 +111,17 @@ public class BuildConfig
       String errMessage = "The following repo names were duplicated: " +
         StringUtils.join(repoNames, ", ");
 
-      parseError = new ParseError(errMessage);
+      parseError = new ReturnErrorImpl(errMessage);
       return new ImmutablePair<>(null, parseError);
     } else {
       return new ImmutablePair<>(repoConfigMap, null);
     }
   }
 
-  public static Pair<DAG<RepoConfig>, ParseError> createRepoConfigDAG(List<RepoConfig> repoConfigs) {
-    Pair<Map<String, RepoConfig>, ParseError> repoConfigMapPair = createRepoConfigMap(repoConfigs);
+  public static Pair<DAG<RepoConfig>, ReturnError> createRepoConfigDAG(List<RepoConfig> repoConfigs) {
+    Pair<Map<String, RepoConfig>, ReturnError> repoConfigMapPair = createRepoConfigMap(repoConfigs);
     Map<String, RepoConfig> repoConfigMap = repoConfigMapPair.getLeft();
-    ParseError parseError = repoConfigMapPair.getRight();
+    ReturnError parseError = repoConfigMapPair.getRight();
 
     if (parseError != null) {
       return new ImmutablePair<>(null, parseError);
@@ -155,13 +155,13 @@ public class BuildConfig
         collect(Collectors.toList());
 
       String errMessage = "DAG creation errors:\n" + StringUtils.join(dagErrorMessages, "\n");
-      return new ImmutablePair<>(null, new ParseError(errMessage));
+      return new ImmutablePair<>(null, new ReturnErrorImpl(errMessage));
     }
 
     return new ImmutablePair<>(dag, null);
   }
 
-  public static ParseResult<BuildConfig> parse(InputStream dataInputStream)
+  public static ParseResult<BuildConfig> parse(InputStream dataInputStream) throws ParseException
   {
     ObjectMapper om = new ObjectMapper();
     om.registerModule(new Jdk8Module());
@@ -169,16 +169,16 @@ public class BuildConfig
     try {
       BuildConfig buildConfig = om.readValue(dataInputStream, BuildConfig.class);
 
-      Pair<DAG<RepoConfig>, ParseError> dagPair = createRepoConfigDAG(buildConfig.getRepoConfigs());
-      ParseError parseError = dagPair.getRight();
+      Pair<DAG<RepoConfig>, ReturnError> dagPair = createRepoConfigDAG(buildConfig.getRepoConfigs());
+      ReturnError parseError = dagPair.getRight();
 
       if (parseError != null) {
-        return new ParseResult<>(parseError);
+        throw new ParseException(parseError.getMessage());
       } else {
         return new ParseResult<>(buildConfig);
       }
     } catch (IOException e) {
-      return new ParseResult<>(new ParseError(e));
+      throw new ParseException(e);
     }
   }
 }

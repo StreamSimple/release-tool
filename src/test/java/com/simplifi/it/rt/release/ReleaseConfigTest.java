@@ -1,6 +1,8 @@
 package com.simplifi.it.rt.release;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.simplifi.it.rt.parse.ParseException;
 import com.simplifi.it.rt.parse.ParseResult;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -17,7 +19,13 @@ public class ReleaseConfigTest
   @Test
   public void simpleDeserializeTest() throws IOException {
     InputStream inputStream = ReleaseConfigTest.class.getClassLoader().getResourceAsStream("simpleReleaseConfig.json");
-    ParseResult<ReleaseConfig> result = ReleaseConfig.parse(inputStream);
+    ParseResult<ReleaseConfig> result = null;
+
+    try {
+      result = ReleaseConfig.parse(inputStream);
+    } catch (ParseException e) {
+      Throwables.propagate(e);
+    }
 
     ReleaseConfig expectedConfig = new ReleaseConfig(
       Lists.newArrayList(new RepoConfig("/repos/myRepo1", "test1", Optional.empty()),
@@ -29,7 +37,6 @@ public class ReleaseConfigTest
     System.out.println(result.getValue().getRepoConfigs().get(3).getReleaseCommand().
       equals(expectedConfig.getRepoConfigs().get(3).getReleaseCommand()));
 
-    Assert.assertFalse(result.hasError());
     Assert.assertEquals(expectedConfig, result.getValue());
   }
 }

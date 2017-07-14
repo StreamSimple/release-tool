@@ -1,10 +1,12 @@
 package com.simplifi.it.rt.build;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.rt.dag.DAG;
-import com.simplifi.it.rt.parse.ParseError;
+import com.simplifi.it.rt.parse.ParseException;
 import com.simplifi.it.rt.parse.ParseResult;
 import junit.framework.Assert;
 import org.apache.commons.lang3.tuple.Pair;
@@ -23,11 +25,16 @@ public class BuildConfigTest
   public void simpleDeserializeTest()
   {
     InputStream inputStream = BuildConfigTest.class.getClassLoader().getResourceAsStream("simpleBuildConfig.json");
-    ParseResult<BuildConfig> result = BuildConfig.parse(inputStream);
+    ParseResult<BuildConfig> result = null;
+
+    try {
+      result = BuildConfig.parse(inputStream);
+    } catch (ParseException e) {
+      Throwables.propagate(e);
+    }
 
     BuildConfig expectedConfig = new BuildConfig(createCorrectRepoConfigList());
 
-    Assert.assertFalse(result.hasError());
     Assert.assertEquals(result.getValue(), expectedConfig);
   }
 
@@ -43,9 +50,9 @@ public class BuildConfigTest
     expectedMap.put("myRepo4",
       new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1")));
 
-    Pair<Map<String, RepoConfig>, ParseError> mapPair = createRepoConfigMap(createCorrectRepoConfigList());
+    Pair<Map<String, RepoConfig>, ReturnError> mapPair = createRepoConfigMap(createCorrectRepoConfigList());
     Map<String, RepoConfig> actualMap = mapPair.getLeft();
-    ParseError actualError = mapPair.getRight();
+    ReturnError actualError = mapPair.getRight();
 
     Assert.assertNull(actualError);
     Assert.assertEquals(expectedMap, actualMap);
@@ -60,26 +67,26 @@ public class BuildConfigTest
       new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"))
     );
 
-    Pair<Map<String, RepoConfig>, ParseError> mapPair = createRepoConfigMap(repoConfigs);
+    Pair<Map<String, RepoConfig>, ReturnError> mapPair = createRepoConfigMap(repoConfigs);
     Assert.assertNull(mapPair.getLeft());
     Assert.assertNotNull(mapPair.getRight());
   }
 
   @Test
   public void simpleCreateRepoConfigDAGTest() {
-    Pair<DAG<RepoConfig>, ParseError> dagPair = BuildConfig.createRepoConfigDAG(createCorrectRepoConfigList());
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(createCorrectRepoConfigList());
     DAG<RepoConfig> dag = dagPair.getLeft();
-    ParseError parseError = dagPair.getRight();
+    ReturnError parseError = dagPair.getRight();
 
     Assert.assertNull(parseError);
 
     List<RepoConfig> repoConfigs = dag.getNodes().stream().collect(Collectors.toList());
-    Pair<Map<String, RepoConfig>, ParseError> actualMapPair = createRepoConfigMap(repoConfigs);
+    Pair<Map<String, RepoConfig>, ReturnError> actualMapPair = createRepoConfigMap(repoConfigs);
     Map<String, RepoConfig> actualRepoConfigMap = actualMapPair.getLeft();
-    ParseError mapParseError = actualMapPair.getRight();
+    ReturnError mapParseError = actualMapPair.getRight();
     Assert.assertNull(mapParseError);
 
-    Pair<Map<String, RepoConfig>, ParseError> expectedMapPair = createRepoConfigMap(createCorrectRepoConfigList());
+    Pair<Map<String, RepoConfig>, ReturnError> expectedMapPair = createRepoConfigMap(createCorrectRepoConfigList());
     Map<String, RepoConfig> expectedRepoConfigMap = expectedMapPair.getLeft();
 
     Assert.assertEquals(expectedRepoConfigMap, actualRepoConfigMap);
@@ -103,9 +110,9 @@ public class BuildConfigTest
       new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo55"))
     );
 
-    Pair<DAG<RepoConfig>, ParseError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
-    ParseError parseError = dagPair.getRight();
+    ReturnError parseError = dagPair.getRight();
 
     Assert.assertNull(dag);
     Assert.assertNotNull(parseError);
@@ -120,9 +127,9 @@ public class BuildConfigTest
         new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4")),
         new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1")));
 
-    Pair<DAG<RepoConfig>, ParseError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
-    ParseError parseError = dagPair.getRight();
+    ReturnError parseError = dagPair.getRight();
 
     Assert.assertNull(dag);
     Assert.assertNotNull(parseError);

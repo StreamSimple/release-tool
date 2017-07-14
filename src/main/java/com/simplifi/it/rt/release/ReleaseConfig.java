@@ -3,7 +3,7 @@ package com.simplifi.it.rt.release;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.google.common.base.Preconditions;
-import com.simplifi.it.rt.parse.ParseError;
+import com.simplifi.it.rt.parse.ParseException;
 import com.simplifi.it.rt.parse.ParseResult;
 
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class ReleaseConfig
     return repoConfigs.hashCode();
   }
 
-  public static ParseResult<ReleaseConfig> parse(InputStream dataInputStream) {
+  public static ParseResult<ReleaseConfig> parse(InputStream dataInputStream) throws ParseException {
     ObjectMapper om = new ObjectMapper();
     om.registerModule(new Jdk8Module());
 
@@ -66,7 +66,7 @@ public class ReleaseConfig
       ReleaseConfig releaseConfig = om.readValue(dataInputStream, ReleaseConfig.class);
       return new ParseResult<>(releaseConfig);
     } catch (IOException e) {
-      return new ParseResult<>(new ParseError(e));
+      throw new ParseException(e);
     }
   }
 }
