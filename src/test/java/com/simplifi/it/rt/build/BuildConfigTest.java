@@ -78,7 +78,7 @@ public class BuildConfigTest
     Map<String, RepoConfig> actualRepoConfigMap = actualMapPair.getLeft();
     ParseError mapParseError = actualMapPair.getRight();
     Assert.assertNull(mapParseError);
-    
+
     Pair<Map<String, RepoConfig>, ParseError> expectedMapPair = createRepoConfigMap(createCorrectRepoConfigList());
     Map<String, RepoConfig> expectedRepoConfigMap = expectedMapPair.getLeft();
 
@@ -93,6 +93,22 @@ public class BuildConfigTest
     Assert.assertEquals(Sets.newHashSet(repoConfig1), dag.getChildNodes(repoConfig2));
     Assert.assertEquals(Sets.newHashSet(repoConfig2, repoConfig4), dag.getChildNodes(repoConfig3));
     Assert.assertEquals(Sets.newHashSet(repoConfig1), dag.getChildNodes(repoConfig4));
+  }
+
+  @Test
+  public void simpleCreateRepoConfigDAGFailureNoDepTest() {
+    List<RepoConfig> faultyRepoCofigs = Lists.newArrayList(new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList()),
+      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1")),
+      new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4")),
+      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo55"))
+    );
+
+    Pair<DAG<RepoConfig>, ParseError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
+    DAG<RepoConfig> dag = dagPair.getLeft();
+    ParseError parseError = dagPair.getRight();
+
+    Assert.assertNull(dag);
+    Assert.assertNotNull(parseError);
   }
 
   private List<RepoConfig> createCorrectRepoConfigList() {
