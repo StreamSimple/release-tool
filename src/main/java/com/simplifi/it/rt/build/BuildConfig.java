@@ -83,7 +83,8 @@ public class BuildConfig
     return repoConfigs.hashCode();
   }
 
-  private static Pair<Map<String, RepoConfig>, ParseError> createRepoConfigMap(List<RepoConfig> repoConfigs) {
+
+  public static Pair<Map<String, RepoConfig>, ParseError> createRepoConfigMap(List<RepoConfig> repoConfigs) {
     Map<String, RepoConfig> repoConfigMap = Maps.newHashMap();
     List<RepoConfig> duplicateRepoConfigs = Lists.newArrayList();
 
@@ -109,12 +110,13 @@ public class BuildConfig
         StringUtils.join(repoNames, ", ");
 
       parseError = new ParseError(errMessage);
+      return new ImmutablePair<>(null, parseError);
+    } else {
+      return new ImmutablePair<>(repoConfigMap, null);
     }
-
-    return new ImmutablePair<>(repoConfigMap, parseError);
   }
 
-  private static Pair<DAG<RepoConfig>, ParseError> createRepoConfigDAG(List<RepoConfig> repoConfigs) {
+  public static Pair<DAG<RepoConfig>, ParseError> createRepoConfigDAG(List<RepoConfig> repoConfigs) {
     Pair<Map<String, RepoConfig>, ParseError> repoConfigMapPair = createRepoConfigMap(repoConfigs);
     Map<String, RepoConfig> repoConfigMap = repoConfigMapPair.getLeft();
     ParseError parseError = repoConfigMapPair.getRight();
@@ -164,7 +166,7 @@ public class BuildConfig
       ParseError parseError = dagPair.getRight();
 
       if (parseError != null) {
-        return new ParseResult<BuildConfig>(parseError);
+        return new ParseResult<>(parseError);
       } else {
         return new ParseResult<>(buildConfig);
       }
