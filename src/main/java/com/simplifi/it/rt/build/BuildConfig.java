@@ -10,7 +10,6 @@ import com.simplifi.it.javautil.err.ReturnErrorImpl;
 import com.simplifi.it.rt.dag.DAG;
 import com.simplifi.it.rt.dag.Edge;
 import com.simplifi.it.rt.parse.ParseException;
-import com.simplifi.it.rt.parse.ParseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -161,7 +160,7 @@ public class BuildConfig
     return new ImmutablePair<>(dag, null);
   }
 
-  public static ParseResult<BuildConfig> parse(InputStream dataInputStream) throws ParseException
+  public static BuildConfig parse(InputStream dataInputStream) throws ParseException
   {
     ObjectMapper om = new ObjectMapper();
     om.registerModule(new Jdk8Module());
@@ -175,7 +174,7 @@ public class BuildConfig
       if (parseError != null) {
         throw new ParseException(parseError.getMessage());
       } else {
-        return new ParseResult<>(buildConfig);
+        return buildConfig;
       }
     } catch (IOException e) {
       throw new ParseException(e);

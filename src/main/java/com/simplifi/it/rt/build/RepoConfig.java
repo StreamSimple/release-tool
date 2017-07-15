@@ -4,12 +4,14 @@ import com.google.common.base.Preconditions;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class RepoConfig
 {
   private String name;
   private String path;
   private List<String> dependencies;
+  private Optional<String> command = Optional.empty();
 
   public RepoConfig()
   {
@@ -50,6 +52,16 @@ public class RepoConfig
   public void setDependencies(List<String> dependencies)
   {
     this.dependencies = dependencies;
+  }
+
+  public Optional<String> getCommand()
+  {
+    return command;
+  }
+
+  public void setCommand(Optional<String> buildCommand)
+  {
+    this.command = command;
   }
 
   @Override

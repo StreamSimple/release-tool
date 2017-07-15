@@ -7,7 +7,6 @@ import com.google.common.collect.Sets;
 import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.rt.dag.DAG;
 import com.simplifi.it.rt.parse.ParseException;
-import com.simplifi.it.rt.parse.ParseResult;
 import junit.framework.Assert;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
@@ -24,8 +23,9 @@ public class BuildConfigTest
   @Test
   public void simpleDeserializeTest()
   {
-    InputStream inputStream = BuildConfigTest.class.getClassLoader().getResourceAsStream("simpleBuildConfig.json");
-    ParseResult<BuildConfig> result = null;
+    InputStream inputStream = BuildConfigTest.class.getClassLoader().
+      getResourceAsStream("simpleBuildConfig.json");
+    BuildConfig result = null;
 
     try {
       result = BuildConfig.parse(inputStream);
@@ -35,7 +35,7 @@ public class BuildConfigTest
 
     BuildConfig expectedConfig = new BuildConfig(createCorrectRepoConfigList());
 
-    Assert.assertEquals(result.getValue(), expectedConfig);
+    Assert.assertEquals(result, expectedConfig);
   }
 
   @Test
