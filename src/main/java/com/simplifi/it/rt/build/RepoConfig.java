@@ -17,11 +17,12 @@ public class RepoConfig
   {
   }
 
-  public RepoConfig(String name, String path, List<String> dependencies)
+  public RepoConfig(String name, String path, List<String> dependencies, Optional<String> command)
   {
     this.name = Preconditions.checkNotNull(name);
     this.path = Preconditions.checkNotNull(path);
     this.dependencies = Preconditions.checkNotNull(dependencies);
+    this.command = Preconditions.checkNotNull(command);
   }
 
   public String getName()
