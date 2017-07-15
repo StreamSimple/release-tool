@@ -54,8 +54,7 @@ public class RepoConfig
   }
 
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "RepoConfig{" +
       "path='" + path + '\'' +
       ", mainBranch='" + mainBranch + '\'' +
@@ -64,8 +63,7 @@ public class RepoConfig
   }
 
   @Override
-  public boolean equals(Object o)
-  {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
@@ -77,8 +75,7 @@ public class RepoConfig
   }
 
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     int result = path.hashCode();
     result = 31 * result + mainBranch.hashCode();
     result = 31 * result + releaseCommand.hashCode();

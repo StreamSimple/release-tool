@@ -14,7 +14,6 @@ public class MockCommandExecutor implements CommandExecutor
   @Override
   public ReturnError execute(String workingDirectory, String command) {
     args.add(new ImmutablePair<>(workingDirectory, command));
-
     return null;
   }
 

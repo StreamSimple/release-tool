@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.rt.command.CommandExecutor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +19,11 @@ public class BuildExecutor {
     List<RepoConfig> orderedRepoConfigs = buildConfig.toDAG().inOrderTraversal(RepoConfig.NameComparator.INSTANCE);
     orderedRepoConfigs = orderedRepoConfigs.stream().
       filter(repoConfig -> repoConfig.getCommand().isPresent()).collect(Collectors.toList());
+    Collections.reverse(orderedRepoConfigs);
 
     for (RepoConfig repoConfig: orderedRepoConfigs) {
       String workingDirectory = repoConfig.getPath();
-      String command = repoConfig.getName(); // TODO replace with command not name
+      String command = repoConfig.getCommand().get();
       ReturnError returnError = commandExecutor.execute(workingDirectory, command);
 
       if (returnError != null) {

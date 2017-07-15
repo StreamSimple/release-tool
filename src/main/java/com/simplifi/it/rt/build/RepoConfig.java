@@ -60,24 +60,23 @@ public class RepoConfig
     return command;
   }
 
-  public void setCommand(Optional<String> buildCommand)
+  public void setCommand(Optional<String> command)
   {
     this.command = command;
   }
 
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "RepoConfig{" +
       "name='" + name + '\'' +
       ", path='" + path + '\'' +
       ", dependencies=" + dependencies +
+      ", command=" + command +
       '}';
   }
 
   @Override
-  public boolean equals(Object o)
-  {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
@@ -85,15 +84,16 @@ public class RepoConfig
 
     if (!name.equals(that.name)) return false;
     if (!path.equals(that.path)) return false;
-    return dependencies.equals(that.dependencies);
+    if (!dependencies.equals(that.dependencies)) return false;
+    return command.equals(that.command);
   }
 
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     int result = name.hashCode();
     result = 31 * result + path.hashCode();
     result = 31 * result + dependencies.hashCode();
+    result = 31 * result + command.hashCode();
     return result;
   }
 
