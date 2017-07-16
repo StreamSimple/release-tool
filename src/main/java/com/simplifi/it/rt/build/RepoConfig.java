@@ -12,17 +12,20 @@ public class RepoConfig
   private String path;
   private List<String> dependencies;
   private Optional<String> command = Optional.empty();
+  private Optional<ReleaseConfig> releaseConfig = Optional.empty();
 
   public RepoConfig()
   {
   }
 
-  public RepoConfig(String name, String path, List<String> dependencies, Optional<String> command)
+  public RepoConfig(String name, String path, List<String> dependencies, Optional<String> command,
+                    Optional<ReleaseConfig> releaseConfig)
   {
     this.name = Preconditions.checkNotNull(name);
     this.path = Preconditions.checkNotNull(path);
     this.dependencies = Preconditions.checkNotNull(dependencies);
     this.command = Preconditions.checkNotNull(command);
+    this.releaseConfig = Preconditions.checkNotNull(releaseConfig);
   }
 
   public String getName()
@@ -65,6 +68,16 @@ public class RepoConfig
     this.command = command;
   }
 
+  public Optional<ReleaseConfig> getReleaseConfig()
+  {
+    return releaseConfig;
+  }
+
+  public void setReleaseConfig(Optional<ReleaseConfig> releaseConfig)
+  {
+    this.releaseConfig = releaseConfig;
+  }
+
   @Override
   public String toString() {
     return "RepoConfig{" +
@@ -72,6 +85,7 @@ public class RepoConfig
       ", path='" + path + '\'' +
       ", dependencies=" + dependencies +
       ", command=" + command +
+      ", releaseConfig=" + releaseConfig +
       '}';
   }
 
@@ -85,7 +99,8 @@ public class RepoConfig
     if (!name.equals(that.name)) return false;
     if (!path.equals(that.path)) return false;
     if (!dependencies.equals(that.dependencies)) return false;
-    return command.equals(that.command);
+    if (!command.equals(that.command)) return false;
+    return releaseConfig.equals(that.releaseConfig);
   }
 
   @Override
@@ -94,6 +109,7 @@ public class RepoConfig
     result = 31 * result + path.hashCode();
     result = 31 * result + dependencies.hashCode();
     result = 31 * result + command.hashCode();
+    result = 31 * result + releaseConfig.hashCode();
     return result;
   }
 
@@ -107,6 +123,61 @@ public class RepoConfig
     @Override
     public int compare(RepoConfig configA, RepoConfig configB) {
       return configA.getName().compareTo(configB.getName());
+    }
+  }
+
+  public static class ReleaseConfig {
+    private String mainBranch;
+    private String releaseCommand;
+
+    public ReleaseConfig() {
+    }
+
+    public ReleaseConfig(String mainBranch, String releaseCommand) {
+      this.mainBranch = Preconditions.checkNotNull(mainBranch);
+      this.releaseCommand = Preconditions.checkNotNull(releaseCommand);
+    }
+
+    public String getMainBranch() {
+      return mainBranch;
+    }
+
+    public void setMainBranch(String mainBranch) {
+      this.mainBranch = mainBranch;
+    }
+
+    public String getReleaseCommand() {
+      return releaseCommand;
+    }
+
+    public void setReleaseCommand(String releaseCommand) {
+      this.releaseCommand = releaseCommand;
+    }
+
+    @Override
+    public String toString() {
+      return "ReleaseConfig{" +
+        "mainBranch='" + mainBranch + '\'' +
+        ", releaseCommand='" + releaseCommand + '\'' +
+        '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      ReleaseConfig that = (ReleaseConfig) o;
+
+      if (!mainBranch.equals(that.mainBranch)) return false;
+      return releaseCommand.equals(that.releaseCommand);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = mainBranch.hashCode();
+      result = 31 * result + releaseCommand.hashCode();
+      return result;
     }
   }
 }

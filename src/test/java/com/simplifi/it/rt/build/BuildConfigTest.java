@@ -43,14 +43,17 @@ public class BuildConfigTest
   public void simpleCreateRepoConfigMapTest() {
     Map<String, RepoConfig> expectedMap = Maps.newHashMap();
     expectedMap.put("myRepo1",
-      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(), Optional.empty()));
+      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(),
+        Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo2",
-      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"), Optional.empty()));
+      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo3",
       new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4"),
-        Optional.empty()));
+        Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo4",
-      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"), Optional.empty()));
+      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty()));
 
     Pair<Map<String, RepoConfig>, ReturnError> mapPair = createRepoConfigMap(createCorrectRepoConfigList());
     Map<String, RepoConfig> actualMap = mapPair.getLeft();
@@ -63,11 +66,14 @@ public class BuildConfigTest
   @Test
   public void simpleCreateRepoConfigMapFailTest() {
     List<RepoConfig> repoConfigs = Lists.newArrayList(
-      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(), Optional.empty()),
-      new RepoConfig("myRepo1", "/repos/my/repo/2", Lists.newArrayList("myRepo1"), Optional.empty()),
+      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(),
+        Optional.empty(), Optional.empty()),
+      new RepoConfig("myRepo1", "/repos/my/repo/2", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty()),
       new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4"),
-        Optional.empty()),
-      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"), Optional.empty())
+        Optional.empty(), Optional.empty()),
+      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty())
     );
 
     Pair<Map<String, RepoConfig>, ReturnError> mapPair = createRepoConfigMap(repoConfigs);
@@ -108,11 +114,14 @@ public class BuildConfigTest
   @Test
   public void simpleCreateRepoConfigDAGFailureNoDepTest() {
     List<RepoConfig> faultyRepoCofigs = Lists.newArrayList(
-      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(), Optional.empty()),
-      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"), Optional.empty()),
+      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(),
+        Optional.empty(), Optional.empty()),
+      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty()),
       new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4"),
-        Optional.empty()),
-      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo55"), Optional.empty())
+        Optional.empty(), Optional.empty()),
+      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo55"),
+        Optional.empty(), Optional.empty())
     );
 
     Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
@@ -127,11 +136,14 @@ public class BuildConfigTest
   public void simpleCreateRepoConfigDAGFailureCircularDepsTest() {
     List<RepoConfig> faultyRepoCofigs =
       Lists.newArrayList(
-        new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList("myRepo4"), Optional.empty()),
-        new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"), Optional.empty()),
+        new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList("myRepo4"),
+          Optional.empty(), Optional.empty()),
+        new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"),
+          Optional.empty(), Optional.empty()),
         new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4"),
-          Optional.empty()),
-        new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"), Optional.empty()));
+          Optional.empty(), Optional.empty()),
+        new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"),
+          Optional.empty(), Optional.empty()));
 
     Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
@@ -143,11 +155,14 @@ public class BuildConfigTest
 
   private List<RepoConfig> createCorrectRepoConfigList() {
     return Lists.newArrayList(
-      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(), Optional.empty()),
-      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"), Optional.empty()),
+      new RepoConfig("myRepo1", "/repos/my/repo/1", Lists.newArrayList(),
+        Optional.empty(), Optional.empty()),
+      new RepoConfig("myRepo2", "/repos/my/repo/2", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty()),
       new RepoConfig("myRepo3", "/repos/my/repo/3", Lists.newArrayList("myRepo2", "myRepo4"),
-        Optional.empty()),
-      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"), Optional.empty())
+        Optional.empty(), Optional.empty()),
+      new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"),
+        Optional.empty(), Optional.empty())
     );
   }
 }
