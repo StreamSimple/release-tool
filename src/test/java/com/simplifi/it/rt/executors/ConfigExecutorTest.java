@@ -1,10 +1,12 @@
-package com.simplifi.it.rt.build;
+package com.simplifi.it.rt.executors;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.simplifi.it.javautil.err.ReturnError;
+import com.simplifi.it.rt.config.ConfigFile;
+import com.simplifi.it.rt.config.RepoConfig;
 import com.simplifi.it.rt.dag.DAG;
 import com.simplifi.it.rt.parse.ParseException;
 import junit.framework.Assert;
@@ -17,24 +19,24 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.simplifi.it.rt.build.BuildConfig.createRepoConfigMap;
+import static com.simplifi.it.rt.config.ConfigFile.createRepoConfigMap;
 
-public class BuildConfigTest
+public class ConfigExecutorTest
 {
   @Test
   public void simpleDeserializeTest()
   {
-    InputStream inputStream = BuildConfigTest.class.getClassLoader().
+    InputStream inputStream = ConfigExecutorTest.class.getClassLoader().
       getResourceAsStream("simpleBuildConfig.json");
-    BuildConfig result = null;
+    ConfigFile result = null;
 
     try {
-      result = BuildConfig.parse(inputStream);
+      result = ConfigFile.parse(inputStream);
     } catch (ParseException e) {
       Throwables.propagate(e);
     }
 
-    BuildConfig expectedConfig = new BuildConfig(createCorrectRepoConfigList());
+    ConfigFile expectedConfig = new ConfigFile(createCorrectRepoConfigList());
 
     Assert.assertEquals(result, expectedConfig);
   }
@@ -83,7 +85,7 @@ public class BuildConfigTest
 
   @Test
   public void simpleCreateRepoConfigDAGTest() {
-    Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(createCorrectRepoConfigList());
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = ConfigFile.createRepoConfigDAG(createCorrectRepoConfigList());
     DAG<RepoConfig> dag = dagPair.getLeft();
     ReturnError parseError = dagPair.getRight();
 
@@ -124,7 +126,7 @@ public class BuildConfigTest
         Optional.empty(), Optional.empty())
     );
 
-    Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = ConfigFile.createRepoConfigDAG(faultyRepoCofigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
     ReturnError parseError = dagPair.getRight();
 
@@ -145,7 +147,7 @@ public class BuildConfigTest
         new RepoConfig("myRepo4", "/repos/my/repo/4", Lists.newArrayList("myRepo1"),
           Optional.empty(), Optional.empty()));
 
-    Pair<DAG<RepoConfig>, ReturnError> dagPair = BuildConfig.createRepoConfigDAG(faultyRepoCofigs);
+    Pair<DAG<RepoConfig>, ReturnError> dagPair = ConfigFile.createRepoConfigDAG(faultyRepoCofigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
     ReturnError parseError = dagPair.getRight();
 

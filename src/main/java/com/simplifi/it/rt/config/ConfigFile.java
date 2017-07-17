@@ -1,4 +1,4 @@
-package com.simplifi.it.rt.build;
+package com.simplifi.it.rt.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BuildConfig
+public class ConfigFile
 {
   private List<RepoConfig> repoConfigs;
 
-  public BuildConfig()
+  public ConfigFile()
   {
   }
 
-  public BuildConfig(List<RepoConfig> repoConfigs)
+  public ConfigFile(List<RepoConfig> repoConfigs)
   {
     this.repoConfigs = Preconditions.checkNotNull(repoConfigs);
   }
@@ -62,7 +62,7 @@ public class BuildConfig
   @Override
   public String toString()
   {
-    return "BuildConfig{" +
+    return "ConfigFile{" +
       "repoConfigs=" + repoConfigs +
       '}';
   }
@@ -73,7 +73,7 @@ public class BuildConfig
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
-    BuildConfig that = (BuildConfig) o;
+    ConfigFile that = (ConfigFile) o;
 
     return repoConfigs.equals(that.repoConfigs);
   }
@@ -160,21 +160,21 @@ public class BuildConfig
     return new ImmutablePair<>(dag, null);
   }
 
-  public static BuildConfig parse(InputStream dataInputStream) throws ParseException
+  public static ConfigFile parse(InputStream dataInputStream) throws ParseException
   {
     ObjectMapper om = new ObjectMapper();
     om.registerModule(new Jdk8Module());
 
     try {
-      BuildConfig buildConfig = om.readValue(dataInputStream, BuildConfig.class);
+      ConfigFile configFile = om.readValue(dataInputStream, ConfigFile.class);
 
-      Pair<DAG<RepoConfig>, ReturnError> dagPair = createRepoConfigDAG(buildConfig.getRepoConfigs());
+      Pair<DAG<RepoConfig>, ReturnError> dagPair = createRepoConfigDAG(configFile.getRepoConfigs());
       ReturnError parseError = dagPair.getRight();
 
       if (parseError != null) {
         throw new ParseException(parseError.getMessage());
       } else {
-        return buildConfig;
+        return configFile;
       }
     } catch (IOException e) {
       throw new ParseException(e);

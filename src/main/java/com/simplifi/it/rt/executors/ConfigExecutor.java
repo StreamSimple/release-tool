@@ -1,22 +1,23 @@
-package com.simplifi.it.rt.build;
+package com.simplifi.it.rt.executors;
 
 import com.google.common.base.Preconditions;
 import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.rt.command.CommandExecutor;
+import com.simplifi.it.rt.config.ConfigFile;
+import com.simplifi.it.rt.config.RepoConfig;;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BuildExecutor {
+public class ConfigExecutor {
   private CommandExecutor commandExecutor;
 
-  public BuildExecutor(CommandExecutor commandExecutor) {
+  public ConfigExecutor(CommandExecutor commandExecutor) {
     this.commandExecutor = Preconditions.checkNotNull(commandExecutor);
   }
 
-  public ReturnError execute(BuildConfig buildConfig) {
-    List<RepoConfig> orderedRepoConfigs = buildConfig.toDAG().inOrderTraversal(RepoConfig.NameComparator.INSTANCE);
+  public ReturnError execute(ConfigFile configFile) {
+    List<RepoConfig> orderedRepoConfigs = configFile.toDAG().inOrderTraversal(RepoConfig.NameComparator.INSTANCE);
     orderedRepoConfigs = orderedRepoConfigs.stream().
       filter(repoConfig -> repoConfig.getCommand().isPresent()).collect(Collectors.toList());
     Collections.reverse(orderedRepoConfigs);

@@ -1,4 +1,4 @@
-package com.simplifi.it.rt.build;
+package com.simplifi.it.rt.config;
 
 import com.google.common.base.Preconditions;
 
