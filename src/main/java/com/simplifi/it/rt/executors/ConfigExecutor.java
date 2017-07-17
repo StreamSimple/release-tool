@@ -16,19 +16,35 @@ public class ConfigExecutor {
     this.commandExecutor = Preconditions.checkNotNull(commandExecutor);
   }
 
-  public ReturnError execute(ConfigFile configFile) {
+  public ReturnError executeBuild(ConfigFile configFile) {
+    return execute(configFile, false);
+  }
+
+  public ReturnError executeRelease(ConfigFile configFile) {
+    return execute(configFile, true);
+  }
+
+  private ReturnError execute(ConfigFile configFile, boolean releaseTrueBuildFalse) {
     List<RepoConfig> orderedRepoConfigs = configFile.toDAG().inOrderTraversal(RepoConfig.NameComparator.INSTANCE);
     orderedRepoConfigs = orderedRepoConfigs.stream().
       filter(repoConfig -> repoConfig.getCommand().isPresent()).collect(Collectors.toList());
     Collections.reverse(orderedRepoConfigs);
 
     for (RepoConfig repoConfig: orderedRepoConfigs) {
+      // Execute build
       String workingDirectory = repoConfig.getPath();
       String command = repoConfig.getCommand().get();
       ReturnError returnError = commandExecutor.execute(workingDirectory, command);
 
       if (returnError != null) {
         return returnError;
+      }
+
+      // Execute release
+      if (releaseTrueBuildFalse) {
+        repoConfig.getReleaseConfig().ifPresent(releaseConfig -> {
+          //releaseConfig.
+        });
       }
     }
 

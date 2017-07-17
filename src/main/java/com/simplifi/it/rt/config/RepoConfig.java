@@ -129,6 +129,7 @@ public class RepoConfig
   public static class ReleaseConfig {
     private String mainBranch;
     private String releaseCommand;
+    private String nextVersionCommand;
 
     public ReleaseConfig() {
     }
