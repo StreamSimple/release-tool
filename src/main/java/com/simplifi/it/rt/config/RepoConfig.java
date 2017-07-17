@@ -1,6 +1,7 @@
 package com.simplifi.it.rt.config;
 
 import com.google.common.base.Preconditions;
+import com.simplifi.it.rt.config.version.VersionHandler;
 
 import java.util.Comparator;
 import java.util.List;
@@ -129,7 +130,7 @@ public class RepoConfig
   public static class ReleaseConfig {
     private String mainBranch;
     private String releaseCommand;
-    private String nextVersionCommand;
+    private VersionHandler versionHandler;
 
     public ReleaseConfig() {
     }
@@ -155,11 +156,20 @@ public class RepoConfig
       this.releaseCommand = releaseCommand;
     }
 
+    public VersionHandler getVersionHandler() {
+      return versionHandler;
+    }
+
+    public void setVersionHandler(VersionHandler versionHandler) {
+      this.versionHandler = versionHandler;
+    }
+
     @Override
     public String toString() {
       return "ReleaseConfig{" +
         "mainBranch='" + mainBranch + '\'' +
         ", releaseCommand='" + releaseCommand + '\'' +
+        ", versionHandler=" + versionHandler +
         '}';
     }
 
@@ -171,13 +181,15 @@ public class RepoConfig
       ReleaseConfig that = (ReleaseConfig) o;
 
       if (!mainBranch.equals(that.mainBranch)) return false;
-      return releaseCommand.equals(that.releaseCommand);
+      if (!releaseCommand.equals(that.releaseCommand)) return false;
+      return versionHandler.equals(that.versionHandler);
     }
 
     @Override
     public int hashCode() {
       int result = mainBranch.hashCode();
       result = 31 * result + releaseCommand.hashCode();
+      result = 31 * result + versionHandler.hashCode();
       return result;
     }
   }
