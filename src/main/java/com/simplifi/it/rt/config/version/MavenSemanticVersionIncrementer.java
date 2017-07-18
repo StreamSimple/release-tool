@@ -2,24 +2,22 @@ package com.simplifi.it.rt.config.version;
 
 import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.javautil.err.ReturnErrorImpl;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
 
-public class MavenVersionManipulator implements VersionManipulator
+public class MavenSemanticVersionIncrementer implements VersionIncrementer
 {
-  public static final MavenVersionManipulator INSTANCE = new MavenVersionManipulator();
+  public static final MavenSemanticVersionIncrementer INSTANCE = new MavenSemanticVersionIncrementer();
 
-  private MavenVersionManipulator() {
+  private MavenSemanticVersionIncrementer() {
   }
 
-  @Override
-  public Pair<String, ReturnError> getVersion() {
+  public ReturnError validateVersion(String version) {
     return null;
   }
 
   @Override
-  public ReturnError replaceVersion(String nextVersion) {
+  public String incrementVersion(String version) {
     return null;
   }
 
