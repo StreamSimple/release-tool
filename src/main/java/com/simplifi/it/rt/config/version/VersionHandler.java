@@ -14,7 +14,6 @@ import com.google.common.collect.Maps;
 import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.rt.config.Configurable;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
