@@ -1,8 +1,8 @@
 {
   "repoConfigs": [
-    {"name": "myRepo1", "path": "/repos/my/repo/1", "command": "cmd1", "dependencies":[]},
-    {"name": "myRepo2", "path": "/repos/my/repo/2", "command": "cmd2", "dependencies":["myRepo1"]},
-    {"name": "myRepo3", "path": "/repos/my/repo/3", "command": "cmd3", "dependencies":["myRepo2", "myRepo4"]},
-    {"name": "myRepo4", "path": "/repos/my/repo/4", "dependencies":["myRepo1"]}
+    {"projectType":"MAVEN", "name": "myRepo1", "path": "/repos/my/repo/1", "command": "cmd1", "dependencies":[]},
+    {"projectType":"MAVEN", "name": "myRepo2", "path": "/repos/my/repo/2", "command": "cmd2", "dependencies":["myRepo1"]},
+    {"projectType":"MAVEN", "name": "myRepo3", "path": "/repos/my/repo/3", "command": "cmd3", "dependencies":["myRepo2", "myRepo4"]},
+    {"projectType":"MAVEN", "name": "myRepo4", "path": "/repos/my/repo/4", "dependencies":["myRepo1"]}
   ]
 }

@@ -4,6 +4,7 @@ import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.javautil.err.ReturnErrorImpl;
 
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MavenSemanticVersionIncrementer implements VersionIncrementer
@@ -28,8 +29,43 @@ public class MavenSemanticVersionIncrementer implements VersionIncrementer
   }
 
   @Override
-  public String incrementVersion(String version, VersionIncrementer.IncrementType type) {
-    return null;
+  public String incrementVersion(String version,
+                                 VersionIncrementer.IncrementType type,
+                                 ReleaseType releaseType) {
+    Matcher matcher = VERSION_REGEX.matcher(version);
+    boolean matches = matcher.matches();
+
+    if (matches) {
+      throw new IllegalArgumentException();
+    }
+
+    String major = matcher.group(1);
+    String minor = matcher.group(2);
+    String patch = matcher.group(3);
+
+    long majorLong = Long.parseLong(major);
+    long minorLong = Long.parseLong(minor);
+    long patchLong = Long.parseLong(patch);
+
+    switch (type) {
+      case MAJOR: {
+        majorLong++;
+      }
+      case MINOR: {
+        minorLong++;
+      }
+      case PATCH: {
+        patchLong++;
+      }
+    }
+
+    String newVersionString = majorLong + "." + minorLong + "." + patchLong;
+
+    if (releaseType == ReleaseType.SNAPSHOT) {
+      newVersionString = newVersionString + "-SNAPSHOT";
+    }
+
+    return newVersionString;
   }
 
   @Override

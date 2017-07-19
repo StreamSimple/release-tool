@@ -33,4 +33,9 @@ public class MavenSemanticVersionIncrementerTest
     validateError = incrementer.validateVersion("1/5/0-SNAPSHOT");
     Assert.assertNotNull(validateError);
   }
+
+  @Test
+  public void simpleMajorVersionIncrementerTest() {
+
+  }
 }

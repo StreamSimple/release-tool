@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public class RepoConfig
 {
+  private String projectType;
   private String name;
   private String path;
   private List<String> dependencies;
@@ -19,14 +20,25 @@ public class RepoConfig
   {
   }
 
-  public RepoConfig(String name, String path, List<String> dependencies, Optional<String> command,
-                    Optional<ReleaseConfig> releaseConfig)
+  public RepoConfig(String projectType, String name, String path, List<String> dependencies,
+                    Optional<String> command, Optional<ReleaseConfig> releaseConfig)
   {
+    this.projectType = Preconditions.checkNotNull(projectType);
     this.name = Preconditions.checkNotNull(name);
     this.path = Preconditions.checkNotNull(path);
     this.dependencies = Preconditions.checkNotNull(dependencies);
     this.command = Preconditions.checkNotNull(command);
     this.releaseConfig = Preconditions.checkNotNull(releaseConfig);
+  }
+
+  public String getProjectType()
+  {
+    return projectType;
+  }
+
+  public void setProjectType(String projectType)
+  {
+    this.projectType = projectType;
   }
 
   public String getName()
@@ -82,7 +94,8 @@ public class RepoConfig
   @Override
   public String toString() {
     return "RepoConfig{" +
-      "name='" + name + '\'' +
+      "projectType='" + projectType + '\'' +
+      ", name='" + name + '\'' +
       ", path='" + path + '\'' +
       ", dependencies=" + dependencies +
       ", command=" + command +
@@ -97,6 +110,7 @@ public class RepoConfig
 
     RepoConfig that = (RepoConfig) o;
 
+    if (!projectType.equals(that.projectType)) return false;
     if (!name.equals(that.name)) return false;
     if (!path.equals(that.path)) return false;
     if (!dependencies.equals(that.dependencies)) return false;
@@ -106,12 +120,17 @@ public class RepoConfig
 
   @Override
   public int hashCode() {
-    int result = name.hashCode();
+    int result = projectType.hashCode();
+    result = 31 * result + name.hashCode();
     result = 31 * result + path.hashCode();
     result = 31 * result + dependencies.hashCode();
     result = 31 * result + command.hashCode();
     result = 31 * result + releaseConfig.hashCode();
     return result;
+  }
+
+  enum Type {
+    MAVEN
   }
 
   public static class NameComparator implements Comparator<RepoConfig> {
