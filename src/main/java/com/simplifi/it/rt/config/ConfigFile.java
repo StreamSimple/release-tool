@@ -16,6 +16,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -168,6 +169,16 @@ public class ConfigFile
     try {
       ConfigFile configFile = om.readValue(dataInputStream, ConfigFile.class);
 
+      if (configFile.getRepoConfigs().isEmpty()) {
+        throw new ParseException("repoConfigs must be non-empty.");
+      }
+      
+      ReturnError projectTypeError = validateProjectTypes(configFile.getRepoConfigs());
+
+      if (projectTypeError != null) {
+        throw new ParseException(projectTypeError.getMessage());
+      }
+
       Pair<DAG<RepoConfig>, ReturnError> dagPair = createRepoConfigDAG(configFile.getRepoConfigs());
       ReturnError parseError = dagPair.getRight();
 
@@ -179,5 +190,21 @@ public class ConfigFile
     } catch (IOException e) {
       throw new ParseException(e);
     }
+  }
+
+  public static ReturnError validateProjectTypes(List<RepoConfig> repoConfigs)
+  {
+    Iterator<RepoConfig> repoIterator = repoConfigs.iterator();
+    String projectType = repoIterator.next().getProjectType();
+
+    while(repoIterator.hasNext()) {
+      RepoConfig repoConfig = repoIterator.next();
+
+      if (!projectType.equals(repoConfig.getProjectType())) {
+        return new ReturnErrorImpl("project types don't match");
+      }
+    }
+
+    return null;
   }
 }
