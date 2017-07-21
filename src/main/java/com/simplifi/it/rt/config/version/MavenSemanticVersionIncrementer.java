@@ -35,7 +35,7 @@ public class MavenSemanticVersionIncrementer implements VersionIncrementer
     Matcher matcher = VERSION_REGEX.matcher(version);
     boolean matches = matcher.matches();
 
-    if (matches) {
+    if (!matches) {
       throw new IllegalArgumentException();
     }
 
@@ -50,12 +50,15 @@ public class MavenSemanticVersionIncrementer implements VersionIncrementer
     switch (type) {
       case MAJOR: {
         majorLong++;
+        break;
       }
       case MINOR: {
         minorLong++;
+        break;
       }
       case PATCH: {
         patchLong++;
+        break;
       }
     }
 

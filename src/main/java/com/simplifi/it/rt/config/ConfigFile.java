@@ -172,7 +172,7 @@ public class ConfigFile
       if (configFile.getRepoConfigs().isEmpty()) {
         throw new ParseException("repoConfigs must be non-empty.");
       }
-      
+
       ReturnError projectTypeError = validateProjectTypes(configFile.getRepoConfigs());
 
       if (projectTypeError != null) {
