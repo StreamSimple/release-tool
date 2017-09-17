@@ -19,7 +19,7 @@ public class ProcessCommandExecutor implements CommandExecutor {
     try {
       args = CommandLineUtils.translateCommandline(command);
     } catch (Exception e) {
-      return new ReturnErrorImpl(e.getMessage());
+      return new ReturnErrorImpl(String.format("Error translating command: %s", e.getMessage()));
     }
 
     Process process;
@@ -30,7 +30,7 @@ public class ProcessCommandExecutor implements CommandExecutor {
         .directory(new File(workingDirectory))
         .start();
     } catch (IOException e) {
-      return new ReturnErrorImpl(String.format("Error running command: {}", e.getMessage()));
+      return new ReturnErrorImpl(String.format("Error running command: %s", e.getMessage()));
     }
 
     Thread stdout = new Thread(new LogInputStream(LogInputStream.Type.INFO, process.getInputStream()));
