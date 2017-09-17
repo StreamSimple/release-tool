@@ -14,21 +14,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class BuildOptions implements Command {
-  public static final String BUILD = "build";
-
+public abstract class AbstractBRCommand implements Command {
   @Parameter(names = {"-c"}, description = "The path of the build config.", required = true)
-  private String configPath;
+  protected String configPath;
 
   @Inject
-  private CommandExecutor commandExecutor;
+  protected CommandExecutor commandExecutor;
 
-  public String getConfigPath() {
-    return configPath;
-  }
-
-  @Override
-  public ReturnError execute() {
+  public ReturnError executeHelper(ConfigExecutor.Type type) {
     ConfigFile configFile = null;
 
     try (FileInputStream fileInputStream = new FileInputStream(new File(configPath))) {
@@ -45,6 +38,25 @@ public class BuildOptions implements Command {
     }
 
     ConfigExecutor configExecutor = new ConfigExecutor(commandExecutor);
-    return configExecutor.executeBuild(configFile);
+    return configExecutor.execute(configFile, type);
+  }
+
+  public String getConfigPath() {
+    return configPath;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    BuildCommand that = (BuildCommand) o;
+
+    return configPath.equals(that.configPath);
+  }
+
+  @Override
+  public int hashCode() {
+    return configPath.hashCode();
   }
 }

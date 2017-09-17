@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConfigExecutor {
+  public enum Type {
+    BUILD,
+    RELEASE
+  }
+
   private CommandExecutor commandExecutor;
 
   public ConfigExecutor(CommandExecutor commandExecutor) {
@@ -17,14 +22,14 @@ public class ConfigExecutor {
   }
 
   public ReturnError executeBuild(ConfigFile configFile) {
-    return execute(configFile, false);
+    return execute(configFile, Type.BUILD);
   }
 
   public ReturnError executeRelease(ConfigFile configFile) {
-    return execute(configFile, true);
+    return execute(configFile, Type.RELEASE);
   }
 
-  private ReturnError execute(ConfigFile configFile, boolean releaseTrueBuildFalse) {
+  public ReturnError execute(ConfigFile configFile, Type type) {
     List<RepoConfig> orderedRepoConfigs = configFile.toDAG().inOrderTraversal(RepoConfig.NameComparator.INSTANCE);
     orderedRepoConfigs = orderedRepoConfigs.stream().
       filter(repoConfig -> repoConfig.getCommand().isPresent()).collect(Collectors.toList());
@@ -41,7 +46,7 @@ public class ConfigExecutor {
       }
 
       // Execute release
-      if (releaseTrueBuildFalse) {
+      if (type.equals(Type.RELEASE)) {
         repoConfig.getReleaseConfig().ifPresent(releaseConfig -> {
           //releaseConfig.
         });

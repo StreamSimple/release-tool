@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.simplifi.it.rt.module.ProdModule;
+import com.simplifi.it.rt.module.TestModule;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -13,13 +14,15 @@ public class ReleaseToolTest
   public void testParsingBuildOptions() {
     final String expectedConfigPath = "src/test/resources/simpleBuildConfig.json";
 
-    Injector injector = Guice.createInjector(new ProdModule());
+    Injector injector = Guice.createInjector(new TestModule());
     OptionPackage optionPackage = ReleaseTool.buildCommands(injector);
     JCommander jc = ReleaseTool.buildCommands(optionPackage);
-    jc.parse(BuildOptions.BUILD, "-c", expectedConfigPath);
+    jc.parse(BuildCommand.BUILD, "-c", expectedConfigPath);
 
-    Assert.assertEquals(BuildOptions.BUILD, jc.getParsedCommand());
-    BuildOptions build = (BuildOptions) optionPackage.getCommands().get(BuildOptions.BUILD);
-    Assert.assertEquals(expectedConfigPath, build.getConfigPath());
+    BuildCommand expectedBuildCommand = new BuildCommand.Builder(injector, expectedConfigPath).build();
+
+    Assert.assertEquals(BuildCommand.BUILD, jc.getParsedCommand());
+    BuildCommand build = (BuildCommand) optionPackage.getCommands().get(BuildCommand.BUILD);
+    Assert.assertEquals(expectedBuildCommand, build);
   }
 }

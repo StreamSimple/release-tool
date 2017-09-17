@@ -32,9 +32,14 @@ public class ReleaseTool
   {
     Map<String, Command> commands = Maps.newHashMap();
 
-    BuildOptions buildOptions = new BuildOptions();
-    injector.injectMembers(buildOptions);
-    commands.put(BuildOptions.BUILD, buildOptions);
+    BuildCommand buildCommand = new BuildCommand();
+    ReleaseCommand releaseCommand = new ReleaseCommand();
+
+    injector.injectMembers(buildCommand);
+    injector.injectMembers(releaseCommand);
+
+    commands.put(BuildCommand.BUILD, buildCommand);
+    commands.put(ReleaseCommand.RELEASE, releaseCommand);
 
     return new OptionPackage(commands);
   }
