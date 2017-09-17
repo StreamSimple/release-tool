@@ -23,6 +23,10 @@ public class BuildOptions implements Command {
   @Inject
   private CommandExecutor commandExecutor;
 
+  public String getConfigPath() {
+    return configPath;
+  }
+
   @Override
   public ReturnError execute() {
     ConfigFile configFile = null;
