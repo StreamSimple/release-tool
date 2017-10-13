@@ -1,10 +1,15 @@
 package com.simplifi.it.rt.srcctl;
 
 import com.simplifi.it.javautil.err.ReturnError;
+import com.simplifi.it.javautil.err.ReturnErrorImpl;
 import com.simplifi.it.javautils.testutils.DirTestWatcher;
 import com.simplifi.it.rt.executors.ProcessCommandExecutor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,20 +52,70 @@ public class GitSourceControlAgentTest {
 
   @Test
   public void hasUncommittedTestFalse() {
-    SourceControlAgent sourceControlAgent = testWatcher.getSourceControlAgent();
+    SourceControlAgent agent = testWatcher.getSourceControlAgent();
 
     Assert.assertEquals(
       new ImmutablePair<>(false, null),
-      sourceControlAgent.hasUncommittedChanges());
+      agent.hasUncommittedChanges());
   }
 
   @Test
   public void hasCommittedTestTrue() throws IOException {
     new File(testWatcher.getDir(), "test.txt").createNewFile();
-    SourceControlAgent sourceControlAgent = testWatcher.getSourceControlAgent();
+    SourceControlAgent agent = testWatcher.getSourceControlAgent();
 
     Assert.assertEquals(
       new ImmutablePair<>(true, null),
-      sourceControlAgent.hasUncommittedChanges());
+      agent.hasUncommittedChanges());
+  }
+
+  @Test
+  public void createBranchTest() throws Exception {
+    addCommitToRepo();
+
+    SourceControlAgent agent = testWatcher.getSourceControlAgent();
+
+    ReturnError error = agent.createBranchFrom("master", "test1");
+    Assert.assertNull(error);
+
+    checkCurrentBranch("master");
+  }
+
+  @Test
+  public void checkoutBranchTest() throws Exception {
+    addCommitToRepo();
+
+    SourceControlAgent agent = testWatcher.getSourceControlAgent();
+
+    ReturnError error = agent.createBranchFrom("master", "test1");
+    Assert.assertNull(error);
+    error = agent.checkoutBranch("test1");
+    Assert.assertNull(error);
+
+    checkCurrentBranch("test1");
+  }
+
+  private void checkCurrentBranch(String name) {
+    SourceControlAgent agent = testWatcher.getSourceControlAgent();
+
+    Pair<String, ReturnError> result = agent.getCurrentBranch();
+    Assert.assertNull(result.getRight());
+    Assert.assertEquals(name, result.getLeft());
+  }
+
+  private void addCommitToRepo() throws Exception {
+    new File(testWatcher.getDir(), "test.txt").createNewFile();
+
+    Repository repository = new FileRepositoryBuilder()
+      .readEnvironment()
+      .findGitDir(testWatcher.getDir())
+      .build();
+
+    try (Git git = new Git(repository)) {
+      git.commit()
+        .setCommitter("tester", "tester@release-tool.io")
+        .setMessage("Testing")
+        .call();
+    }
   }
 }

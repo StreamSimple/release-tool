@@ -58,7 +58,7 @@ public class GitSourceControlAgent implements SourceControlAgent
   @Override
   public Pair<String, ReturnError> getCurrentBranch() {
     try {
-      return new ImmutablePair<>(repository.getFullBranch(), null);
+      return new ImmutablePair<>(repository.getBranch(), null);
     } catch (IOException e) {
       String message = String.format("Error getting current branch name: %s", e.getMessage());
       return new ImmutablePair<>(null, new ReturnErrorImpl(message));
