@@ -26,6 +26,16 @@ public class GitSourceControlAgent implements SourceControlAgent
 
   @Override
   public ReturnError checkoutBranch(String branch) {
+    try (Git git = new Git(repository)) {
+      try {
+        git.checkout()
+          .setName(branch)
+          .call();
+      } catch (GitAPIException e) {
+        return new ReturnErrorImpl(e.getMessage());
+      }
+    }
+
     return null;
   }
 
@@ -43,6 +53,16 @@ public class GitSourceControlAgent implements SourceControlAgent
     }
 
     return null;
+  }
+
+  @Override
+  public Pair<String, ReturnError> getCurrentBranch() {
+    try {
+      return new ImmutablePair<>(repository.getFullBranch(), null);
+    } catch (IOException e) {
+      String message = String.format("Error getting current branch name: %s", e.getMessage());
+      return new ImmutablePair<>(null, new ReturnErrorImpl(message));
+    }
   }
 
   @Override

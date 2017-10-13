@@ -16,6 +16,11 @@ public class MockSourceControlAgent implements SourceControlAgent
   }
 
   @Override
+  public Pair<String, ReturnError> getCurrentBranch() {
+    return null;
+  }
+
+  @Override
   public Pair<Boolean, ReturnError> hasUncommittedChanges() {
     return null;
   }

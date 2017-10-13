@@ -7,5 +7,6 @@ public interface SourceControlAgent
 {
   ReturnError checkoutBranch(String branch);
   ReturnError createBranchFrom(String srcBranch, String destBranch);
+  Pair<String, ReturnError> getCurrentBranch();
   Pair<Boolean, ReturnError> hasUncommittedChanges();
 }
