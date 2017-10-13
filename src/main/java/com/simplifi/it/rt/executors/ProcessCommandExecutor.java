@@ -24,6 +24,7 @@ public class ProcessCommandExecutor implements CommandExecutor {
 
     Process process;
 
+    System.out.println(workingDirectory);
     try {
       ProcessBuilder pb = new ProcessBuilder();
       process = pb.command(args)

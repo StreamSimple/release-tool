@@ -47,41 +47,50 @@ public class GitSourceControlAgent implements SourceControlAgent
 
   @Override
   public Pair<Boolean, ReturnError> hasUncommittedChanges() {
+    boolean hasUncommitted = false;
+
     try (Git git = new Git(repository)) {
       Status status = git.status().call();
 
       if (!status.getAdded().isEmpty()) {
         log.info("Uncommitted added files {}", status.getAdded());
+        hasUncommitted = true;
       }
 
       if (!status.getChanged().isEmpty()) {
         log.info("Uncommitted changed files {}", status.getChanged());
+        hasUncommitted = true;
       }
 
       if (!status.getConflicting().isEmpty()) {
         log.info("Conflicting files {}", status.getConflicting());
+        hasUncommitted = true;
       }
 
       if (!status.getModified().isEmpty()) {
         log.info("Modified files {}", status.getModified());
+        hasUncommitted = true;
       }
 
       if (!status.getRemoved().isEmpty()) {
         log.info("Removed files {}", status.getRemoved());
+        hasUncommitted = true;
       }
 
       if (!status.getUntracked().isEmpty()) {
         log.info("Untracked files {}", status.getUntracked());
+        hasUncommitted = true;
       }
 
       if (!status.getUntrackedFolders().isEmpty()) {
         log.info("Untracked folders {}", status.getUntrackedFolders());
+        hasUncommitted = true;
       }
     } catch (GitAPIException e) {
       return new ImmutablePair<>(null, new ReturnErrorImpl(e.getMessage()));
     }
 
-    return new ImmutablePair<>(true, null);
+    return new ImmutablePair<>(hasUncommitted, null);
   }
 
   public static class Builder {

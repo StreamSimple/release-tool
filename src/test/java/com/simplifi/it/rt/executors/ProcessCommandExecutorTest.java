@@ -19,8 +19,8 @@ public class ProcessCommandExecutorTest {
     ProcessCommandExecutor commandExecutor = new ProcessCommandExecutor();
 
     ReturnError returnError = commandExecutor.execute(dirTestWatcher.getDirPath(), command);
-    Assert.assertNull(returnError);
 
-    Assert.assertTrue(new File(String.format("%s/%s", dirTestWatcher.getDirPath(), "test.txt")).exists());
+    Assert.assertNull(returnError);
+    Assert.assertTrue(new File(dirTestWatcher.getDir(), "test.txt").exists());
   }
 }
