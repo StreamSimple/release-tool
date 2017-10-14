@@ -128,10 +128,6 @@ public class RepoConfig {
     return result;
   }
 
-  enum Type {
-    MAVEN
-  }
-
   public static class NameComparator implements Comparator<RepoConfig> {
     public static final NameComparator INSTANCE = new NameComparator();
 

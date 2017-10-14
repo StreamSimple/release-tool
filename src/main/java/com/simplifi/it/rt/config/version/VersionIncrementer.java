@@ -1,9 +1,8 @@
 package com.simplifi.it.rt.config.version;
 
 import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.rt.config.Configurable;
 
-public interface VersionIncrementer extends Configurable
+public interface VersionIncrementer
 {
   ReturnError validateVersion(String version);
   String incrementVersion(String version, IncrementType type, ReleaseType releaseType);
@@ -14,5 +13,12 @@ public interface VersionIncrementer extends Configurable
 
   enum ReleaseType {
     RELEASE, SNAPSHOT
+  }
+
+  interface Config {
+  }
+
+  interface Builder {
+    VersionIncrementer build(Config config);
   }
 }

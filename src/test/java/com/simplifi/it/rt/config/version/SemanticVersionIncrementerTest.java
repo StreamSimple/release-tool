@@ -4,16 +4,11 @@ import com.simplifi.it.javautil.err.ReturnError;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MavenSemanticVersionIncrementerTest
+public class SemanticVersionIncrementerTest
 {
   @Test
-  public void simpleHasConfig() {
-    Assert.assertFalse(MavenSemanticVersionIncrementer.INSTANCE.hasConfig());
-  }
-
-  @Test
   public void simpleVersionValidationSuccessTest() {
-    MavenSemanticVersionIncrementer incrementer = MavenSemanticVersionIncrementer.INSTANCE;
+    SemanticVersionIncrementer incrementer = SemanticVersionIncrementer.INSTANCE;
 
     ReturnError validateError = incrementer.validateVersion("1.5.0");
     Assert.assertNull(validateError);
@@ -36,7 +31,7 @@ public class MavenSemanticVersionIncrementerTest
 
   @Test
   public void simpleMajorVersionIncrementerTest() {
-    MavenSemanticVersionIncrementer incrementer = MavenSemanticVersionIncrementer.INSTANCE;
+    SemanticVersionIncrementer incrementer = SemanticVersionIncrementer.INSTANCE;
 
     String actualIncrement = incrementer.incrementVersion("1.5.0-SNAPSHOT",
       VersionIncrementer.IncrementType.MAJOR,
@@ -53,7 +48,7 @@ public class MavenSemanticVersionIncrementerTest
 
   @Test
   public void simpleMinorVersionIncrementerTest() {
-    MavenSemanticVersionIncrementer incrementer = MavenSemanticVersionIncrementer.INSTANCE;
+    SemanticVersionIncrementer incrementer = SemanticVersionIncrementer.INSTANCE;
 
     String actualIncrement = incrementer.incrementVersion("1.5.0-SNAPSHOT",
       VersionIncrementer.IncrementType.MINOR,
@@ -70,7 +65,7 @@ public class MavenSemanticVersionIncrementerTest
 
   @Test
   public void simplePatchVersionIncrementerTest() {
-    MavenSemanticVersionIncrementer incrementer = MavenSemanticVersionIncrementer.INSTANCE;
+    SemanticVersionIncrementer incrementer = SemanticVersionIncrementer.INSTANCE;
 
     String actualIncrement = incrementer.incrementVersion("1.5.0-SNAPSHOT",
       VersionIncrementer.IncrementType.PATCH,

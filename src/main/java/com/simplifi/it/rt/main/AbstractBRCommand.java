@@ -11,7 +11,6 @@ import com.simplifi.it.rt.parse.ParseException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public abstract class AbstractBRCommand implements Command {
@@ -22,23 +21,13 @@ public abstract class AbstractBRCommand implements Command {
   protected CommandExecutor commandExecutor;
 
   public ReturnError executeHelper(ConfigExecutor.Type type) {
-    ConfigFile configFile = null;
-
     try (FileInputStream fileInputStream = new FileInputStream(new File(configPath))) {
-      try {
-        configFile = ConfigFile.parse(fileInputStream);
-      } catch (ParseException e) {
-        return new ReturnErrorImpl(e.getMessage());
-      }
-
-    } catch (FileNotFoundException e) {
-      return new ReturnErrorImpl(e.getMessage());
-    } catch (IOException e) {
+      ConfigFile configFile = ConfigFile.parse(fileInputStream);
+      ConfigExecutor configExecutor = new ConfigExecutor(commandExecutor);
+      return configExecutor.execute(configFile, type);
+    } catch (ParseException | IOException e) {
       return new ReturnErrorImpl(e.getMessage());
     }
-
-    ConfigExecutor configExecutor = new ConfigExecutor(commandExecutor);
-    return configExecutor.execute(configFile, type);
   }
 
   public String getConfigPath() {

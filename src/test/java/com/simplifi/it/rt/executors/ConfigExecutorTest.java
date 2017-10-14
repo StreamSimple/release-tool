@@ -5,9 +5,9 @@ import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.rt.config.ConfigFile;
 import com.simplifi.it.rt.config.ConfigFileTest;
 import com.simplifi.it.rt.parse.ParseException;
-import junit.framework.Assert;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -25,7 +25,7 @@ public class ConfigExecutorTest
     ConfigFile result = ConfigFile.parse(inputStream);
 
     ConfigExecutor configExecutor = new ConfigExecutor(commandExecutor);
-    ReturnError returnError = configExecutor.executeBuild(result);
+    ReturnError returnError = configExecutor.execute(result, ConfigExecutor.Type.BUILD);
     Assert.assertNull(returnError);
 
     List<Pair<String, String>> expectedPairs = Lists.newArrayList();

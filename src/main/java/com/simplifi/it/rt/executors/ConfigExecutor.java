@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConfigExecutor {
+  public static final String DEFAULT_RELEASE_BRANCH_PREFIX = "release-";
+  public static final String DEFAULT_SRC_BRANCH = "master";
+
   public enum Type {
     BUILD,
     RELEASE
@@ -19,14 +22,6 @@ public class ConfigExecutor {
 
   public ConfigExecutor(CommandExecutor commandExecutor) {
     this.commandExecutor = Preconditions.checkNotNull(commandExecutor);
-  }
-
-  public ReturnError executeBuild(ConfigFile configFile) {
-    return execute(configFile, Type.BUILD);
-  }
-
-  public ReturnError executeRelease(ConfigFile configFile) {
-    return execute(configFile, Type.RELEASE);
   }
 
   public ReturnError execute(ConfigFile configFile, Type type) {

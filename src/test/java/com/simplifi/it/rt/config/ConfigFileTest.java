@@ -53,16 +53,16 @@ public class ConfigFileTest
   public void simpleCreateRepoConfigMapTest() {
     Map<String, RepoConfig> expectedMap = Maps.newHashMap();
     expectedMap.put("myRepo1",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(),"myRepo1", "master", "/repos/my/repo/1",
+      new RepoConfig(ProjectManager.MAVEN.toString(),"myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo2",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo3",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo4",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()));
 
     Pair<Map<String, RepoConfig>, ReturnError> mapPair = createRepoConfigMap(createCorrectRepoConfigList());
@@ -76,13 +76,13 @@ public class ConfigFileTest
   @Test
   public void simpleCreateRepoConfigMapFailTest() {
     List<RepoConfig> repoConfigs = Lists.newArrayList(
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/2",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty())
     );
 
@@ -124,13 +124,13 @@ public class ConfigFileTest
   @Test
   public void simpleCreateRepoConfigDAGFailureNoDepTest() {
     List<RepoConfig> faultyRepoCofigs = Lists.newArrayList(
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo55"), Optional.empty(), Optional.empty())
     );
 
@@ -146,13 +146,13 @@ public class ConfigFileTest
   public void simpleCreateRepoConfigDAGFailureCircularDepsTest() {
     List<RepoConfig> faultyRepoCofigs =
       Lists.newArrayList(
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
+        new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
           Lists.newArrayList("myRepo4"), Optional.empty(), Optional.empty()),
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
+        new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
           Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
+        new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
           Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
+        new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
           Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()));
 
     Pair<DAG<RepoConfig>, ReturnError> dagPair = ConfigFile.createRepoConfigDAG(faultyRepoCofigs);
@@ -165,13 +165,13 @@ public class ConfigFileTest
 
   private List<RepoConfig> createCorrectRepoConfigList() {
     return Lists.newArrayList(
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
+      new RepoConfig(ProjectManager.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty())
     );
   }
