@@ -1,8 +1,14 @@
 {
   "repoConfigs": [
-    {"path":"/repos/myRepo1", "mainBranch":"test1"},
-    {"path":"/repos/myRepo2"},
-    {"path":"/repos/myRepo3", "mainBranch":"master"},
-    {"path":"/repos/myRepo4", "mainBranch":"test2", "releaseCommand":"echo 'Hello World'"}
+    {"projectType":"MAVEN", "name": "myRepo1", "srcBranch": "master", "path": "/repos/my/repo/1",
+      "dependencies":[]},
+    {"projectType":"MAVEN", "name": "myRepo2", "srcBranch": "master", "path": "/repos/my/repo/2",
+      "releaseConfig": {}, "dependencies":["myRepo1"]},
+    {"projectType":"MAVEN", "name": "myRepo3", "srcBranch": "master", "path": "/repos/my/repo/3",
+      "releaseConfig": {"branchPrefix": "release-", "command": "runme", "versionHandler": "v1"},
+      "dependencies":["myRepo2", "myRepo4"]},
+    {"projectType":"MAVEN", "name": "myRepo4", "srcBranch": "master", "path": "/repos/my/repo/4",
+      "releaseConfig": {"branchPrefix": "release-", "command": "runme", "versionHandler": "v2"},
+      "dependencies":["myRepo1"]}
   ]
 }

@@ -1,14 +1,12 @@
 package com.simplifi.it.rt.config;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.simplifi.it.javautil.err.ReturnError;
 import com.simplifi.it.rt.dag.DAG;
-import com.simplifi.it.rt.parse.ParseException;
-import junit.framework.Assert;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -22,37 +20,49 @@ import static com.simplifi.it.rt.config.ConfigFile.createRepoConfigMap;
 public class ConfigFileTest
 {
   @Test
-  public void simpleDeserializeTest()
-  {
-    InputStream inputStream = ConfigFileTest.class.getClassLoader().
-      getResourceAsStream("simpleBuildConfig.json");
-    ConfigFile result = null;
-
-    try {
-      result = ConfigFile.parse(inputStream);
-    } catch (ParseException e) {
-      Throwables.propagate(e);
+  public void simpleDeserializeTest() throws Exception {
+    try (InputStream inputStream = ConfigFileTest.class
+      .getClassLoader()
+      .getResourceAsStream("simpleBuildConfig.json")) {
+      ConfigFile result = ConfigFile.parse(inputStream);
+      ConfigFile expectedConfig = new ConfigFile(createCorrectRepoConfigList());
+      Assert.assertEquals(expectedConfig, result);
     }
+  }
 
-    ConfigFile expectedConfig = new ConfigFile(createCorrectRepoConfigList());
-
-    Assert.assertEquals(result, expectedConfig);
+  @Test
+  public void releaseConfigDeserializeTest() throws Exception {
+    try (InputStream inputStream = ConfigFileTest.class
+      .getClassLoader()
+      .getResourceAsStream("simpleReleaseConfig.json")) {
+      ConfigFile result = ConfigFile.parse(inputStream);
+      List<RepoConfig> repoConfigs = createCorrectRepoConfigList();
+      repoConfigs.get(0).setReleaseConfig(Optional.empty());
+      repoConfigs.get(1).setReleaseConfig(Optional.of(
+        new RepoConfig.ReleaseConfig(Optional.empty(), Optional.empty(), Optional.empty())));
+      repoConfigs.get(2).setReleaseConfig(Optional.of(
+        new RepoConfig.ReleaseConfig(Optional.of("release-"), Optional.of("runme"), Optional.of("v1"))));
+      repoConfigs.get(3).setReleaseConfig(Optional.of(
+        new RepoConfig.ReleaseConfig(Optional.of("release-"), Optional.of("runme"), Optional.of("v2"))));
+      ConfigFile expectedConfig = new ConfigFile(repoConfigs);
+      Assert.assertEquals(expectedConfig, result);
+    }
   }
 
   @Test
   public void simpleCreateRepoConfigMapTest() {
     Map<String, RepoConfig> expectedMap = Maps.newHashMap();
     expectedMap.put("myRepo1",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(),"myRepo1", "/repos/my/repo/1",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(),"myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo2",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "/repos/my/repo/2",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo3",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "/repos/my/repo/3",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()));
     expectedMap.put("myRepo4",
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "/repos/my/repo/4",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()));
 
     Pair<Map<String, RepoConfig>, ReturnError> mapPair = createRepoConfigMap(createCorrectRepoConfigList());
@@ -66,13 +76,13 @@ public class ConfigFileTest
   @Test
   public void simpleCreateRepoConfigMapFailTest() {
     List<RepoConfig> repoConfigs = Lists.newArrayList(
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "/repos/my/repo/1",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "/repos/my/repo/2",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "/repos/my/repo/3",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "/repos/my/repo/4",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty())
     );
 
@@ -114,13 +124,13 @@ public class ConfigFileTest
   @Test
   public void simpleCreateRepoConfigDAGFailureNoDepTest() {
     List<RepoConfig> faultyRepoCofigs = Lists.newArrayList(
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "/repos/my/repo/1",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "/repos/my/repo/2",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "/repos/my/repo/3",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "/repos/my/repo/4",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo55"), Optional.empty(), Optional.empty())
     );
 
@@ -136,13 +146,13 @@ public class ConfigFileTest
   public void simpleCreateRepoConfigDAGFailureCircularDepsTest() {
     List<RepoConfig> faultyRepoCofigs =
       Lists.newArrayList(
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "/repos/my/repo/1",
+        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
           Lists.newArrayList("myRepo4"), Optional.empty(), Optional.empty()),
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "/repos/my/repo/2",
+        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
           Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "/repos/my/repo/3",
+        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
           Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "/repos/my/repo/4",
+        new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
           Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()));
 
     Pair<DAG<RepoConfig>, ReturnError> dagPair = ConfigFile.createRepoConfigDAG(faultyRepoCofigs);
@@ -155,13 +165,13 @@ public class ConfigFileTest
 
   private List<RepoConfig> createCorrectRepoConfigList() {
     return Lists.newArrayList(
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "/repos/my/repo/1",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo1", "master", "/repos/my/repo/1",
         Lists.newArrayList(), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "/repos/my/repo/2",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo2", "master", "/repos/my/repo/2",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "/repos/my/repo/3",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo3", "master", "/repos/my/repo/3",
         Lists.newArrayList("myRepo2", "myRepo4"), Optional.empty(), Optional.empty()),
-      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "/repos/my/repo/4",
+      new RepoConfig(RepoConfig.Type.MAVEN.toString(), "myRepo4", "master", "/repos/my/repo/4",
         Lists.newArrayList("myRepo1"), Optional.empty(), Optional.empty())
     );
   }

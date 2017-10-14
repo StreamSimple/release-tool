@@ -3,9 +3,8 @@ package com.simplifi.it.rt.main;
 import com.beust.jcommander.JCommander;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.simplifi.it.rt.module.ProdModule;
 import com.simplifi.it.rt.module.TestModule;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ReleaseToolTest

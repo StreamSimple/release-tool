@@ -31,8 +31,10 @@ public class ConfigExecutor {
 
   public ReturnError execute(ConfigFile configFile, Type type) {
     List<RepoConfig> orderedRepoConfigs = configFile.toDAG().inOrderTraversal(RepoConfig.NameComparator.INSTANCE);
-    orderedRepoConfigs = orderedRepoConfigs.stream().
-      filter(repoConfig -> repoConfig.getCommand().isPresent()).collect(Collectors.toList());
+    orderedRepoConfigs = orderedRepoConfigs
+      .stream()
+      .filter(repoConfig -> repoConfig.getCommand().isPresent())
+      .collect(Collectors.toList());
     Collections.reverse(orderedRepoConfigs);
 
     for (RepoConfig repoConfig: orderedRepoConfigs) {

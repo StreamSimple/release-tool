@@ -11,7 +11,7 @@ public class ReleaseCommand extends AbstractBRCommand {
   public ReleaseCommand() {
   }
 
-  public ReleaseCommand(String configPath) {
+  private ReleaseCommand(String configPath) {
     this.configPath = Preconditions.checkNotNull(configPath);
   }
 
@@ -36,10 +36,10 @@ public class ReleaseCommand extends AbstractBRCommand {
       this.configPath = Preconditions.checkNotNull(configPath);
     }
 
-    public BuildCommand build() {
-      BuildCommand buildCommand = new BuildCommand(configPath);
-      injector.injectMembers(buildCommand);
-      return buildCommand;
+    public ReleaseCommand build() {
+      ReleaseCommand releaseCommand = new ReleaseCommand(configPath);
+      injector.injectMembers(releaseCommand);
+      return releaseCommand;
     }
   }
 }
