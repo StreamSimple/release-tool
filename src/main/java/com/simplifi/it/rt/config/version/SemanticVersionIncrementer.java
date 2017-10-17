@@ -17,11 +17,8 @@ public class SemanticVersionIncrementer implements VersionIncrementer
 
   public ReturnError validateVersion(String version) {
     if (!VERSION_REGEX.matcher(version).matches()) {
-      return new ReturnErrorImpl("Version: \"" +
-        version +
-        "\" does not match the regex\"" +
-        VERSION_REGEX_STRING +
-        "\"");
+      String message = String.format("Version: \"%s\" does not match the regex \"%s\"", version, VERSION_REGEX_STRING);
+      return new ReturnErrorImpl(message);
     }
 
     return null;
@@ -61,7 +58,7 @@ public class SemanticVersionIncrementer implements VersionIncrementer
       }
     }
 
-    String newVersionString = majorLong + "." + minorLong + "." + patchLong;
+    String newVersionString = String.format("%s.%s.%s", majorLong, minorLong, patchLong);
 
     if (releaseType == ReleaseType.SNAPSHOT) {
       newVersionString = newVersionString + "-SNAPSHOT";
