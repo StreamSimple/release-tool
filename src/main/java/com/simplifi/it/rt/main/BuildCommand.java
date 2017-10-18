@@ -11,7 +11,7 @@ public class BuildCommand extends AbstractBRCommand {
   public BuildCommand() {
   }
 
-  public BuildCommand(String configPath) {
+  private BuildCommand(String configPath) {
     this.configPath = Preconditions.checkNotNull(configPath);
   }
 

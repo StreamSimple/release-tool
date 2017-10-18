@@ -31,6 +31,20 @@ public class ConfigFileTest
   }
 
   @Test
+  public void simpleDeserializeTestWithCmd() throws Exception {
+    try (InputStream inputStream = ConfigFileTest.class
+      .getClassLoader()
+      .getResourceAsStream("simpleBuildConfigWithCmd.json")) {
+      ConfigFile result = ConfigFile.parse(inputStream);
+      ConfigFile expectedConfig = new ConfigFile(createCorrectRepoConfigList());
+      expectedConfig.getRepoConfigs().get(0).setCommand(Optional.of("cmd1"));
+      expectedConfig.getRepoConfigs().get(1).setCommand(Optional.of("cmd2"));
+      expectedConfig.getRepoConfigs().get(2).setCommand(Optional.of("cmd3"));
+      Assert.assertEquals(expectedConfig, result);
+    }
+  }
+
+  @Test
   public void releaseConfigDeserializeTest() throws Exception {
     try (InputStream inputStream = ConfigFileTest.class
       .getClassLoader()

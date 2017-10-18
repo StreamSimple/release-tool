@@ -141,7 +141,6 @@ public class ConfigFile
           ReturnError dagError = dag.addEdge(new Edge<>(repoConfig, depRepoConfig));
 
           if (dagError != null) {
-            System.out.println("Dag error " + dagError);
             dagErrors.add(dagError);
           }
         }

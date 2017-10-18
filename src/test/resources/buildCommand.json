@@ -1,0 +1,12 @@
+{
+  "repoConfigs": [
+    {"projectType":"MAVEN", "name": "myRepo1", "srcBranch": "master", "path": "%1%",
+      "command": "com1", "dependencies":[]},
+    {"projectType":"MAVEN", "name": "myRepo2", "srcBranch": "master", "path": "%2%",
+      "command": "com2", "dependencies":["myRepo1"]},
+    {"projectType":"MAVEN", "name": "myRepo3", "srcBranch": "master", "path": "%3%",
+      "command": "com3", "dependencies":["myRepo2", "myRepo4"]},
+    {"projectType":"MAVEN", "name": "myRepo4", "srcBranch": "master", "path": "%4%",
+      "command": "com4", "dependencies":["myRepo1"]}
+  ]
+}
