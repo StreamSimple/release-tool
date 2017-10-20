@@ -17,7 +17,7 @@ public class VersionIncrementerLoader
   public static final String CONFIG = "config";
 
   public enum Info {
-    SEMANTIC(new SemanticVersionIncrementer.Builder(), null);
+    SEMANTIC(new SemanticVersionIncrementer.Builder(), SemanticVersionIncrementer.Config.class);
 
     private VersionIncrementer.Builder builder;
     private Class<? extends VersionIncrementer.Config> configClazz;

@@ -1,7 +1,10 @@
 package com.simplifi.it.rt.srcctl;
 
 import com.simplifi.it.javautil.err.ReturnError;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.File;
 
 public class MockSourceControlAgent implements SourceControlAgent
 {
@@ -22,6 +25,18 @@ public class MockSourceControlAgent implements SourceControlAgent
 
   @Override
   public Pair<Boolean, ReturnError> hasUncommittedChanges() {
-    return null;
+    return new ImmutablePair<>(false, null);
+  }
+
+  public static class Builder implements SourceControlAgent.Builder {
+    @Override
+    public SourceControlAgent.Builder setDir(File dir) {
+      return this;
+    }
+
+    @Override
+    public Pair<SourceControlAgent, ReturnError> build() {
+      return new ImmutablePair<>(new MockSourceControlAgent(), null);
+    }
   }
 }

@@ -113,18 +113,18 @@ public class GitSourceControlAgent implements SourceControlAgent
     return new ImmutablePair<>(hasUncommitted, null);
   }
 
-  public static class Builder {
-    private String dirPath;
+  public static class Builder implements SourceControlAgent.Builder {
+    private File dir;
 
-    public Builder(String dirPath) {
-      this.dirPath = Preconditions.checkNotNull(dirPath);
+    public Builder setDir(File dir) {
+      this.dir = Preconditions.checkNotNull(dir);
+      return this;
     }
 
     public Pair<SourceControlAgent, ReturnError> build() {
-      File dir = new File(dirPath);
-
       if (!dir.exists()) {
-        return new ImmutablePair<>(null, new ReturnErrorImpl(String.format("dir %s does not exist", dirPath)));
+        String message = String.format("dir %s does not exist", dir.getAbsolutePath());
+        return new ImmutablePair<>(null, new ReturnErrorImpl(message));
       }
 
       Repository repository;
@@ -132,7 +132,7 @@ public class GitSourceControlAgent implements SourceControlAgent
       try {
         repository = new FileRepositoryBuilder()
           .readEnvironment()
-          .findGitDir(new File(dirPath)).build();
+          .findGitDir(dir).build();
       } catch (IOException e) {
         return new ImmutablePair<>(null,
           new ReturnErrorImpl(String.format("Error accessing repository: %s", e.getMessage())));

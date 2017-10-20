@@ -44,7 +44,9 @@ public class GitSourceControlAgentTest {
     }
 
     private void initSourceControlAgent() {
-      Pair<SourceControlAgent, ReturnError> result = new GitSourceControlAgent.Builder(getDirPath()).build();
+      Pair<SourceControlAgent, ReturnError> result = new GitSourceControlAgent.Builder()
+        .setDir(getDir())
+        .build();
       Assert.assertNull(result.getRight());
       this.sourceControlAgent = result.getLeft();
     }

@@ -8,6 +8,7 @@ import com.simplifi.it.rt.config.ConfigFile;
 import com.simplifi.it.rt.executors.CommandExecutor;
 import com.simplifi.it.rt.executors.ConfigExecutor;
 import com.simplifi.it.rt.parse.ParseException;
+import com.simplifi.it.rt.srcctl.SourceControlAgent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,10 +21,13 @@ public abstract class AbstractBRCommand implements Command {
   @Inject
   protected CommandExecutor commandExecutor;
 
+  @Inject
+  protected SourceControlAgent.Builder agentBuilder;
+
   public ReturnError executeHelper(ConfigExecutor.Type type) {
     try (FileInputStream fileInputStream = new FileInputStream(new File(configPath))) {
       ConfigFile configFile = ConfigFile.parse(fileInputStream);
-      ConfigExecutor configExecutor = new ConfigExecutor(commandExecutor);
+      ConfigExecutor configExecutor = new ConfigExecutor(commandExecutor, agentBuilder);
       return configExecutor.execute(configFile, type);
     } catch (ParseException | IOException e) {
       return new ReturnErrorImpl(e.getMessage());

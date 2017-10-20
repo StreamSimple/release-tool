@@ -9,7 +9,7 @@ import java.util.Optional;
 public class RepoConfig {
   private String projectType;
   private String name;
-  private String srcBranch;
+  private Optional<String> srcBranch = Optional.empty();
   private String path;
   private List<String> dependencies;
   private Optional<String> command = Optional.empty();
@@ -20,7 +20,7 @@ public class RepoConfig {
 
   public RepoConfig(String projectType,
                     String name,
-                    String srcBranch,
+                    Optional<String> srcBranch,
                     String path,
                     List<String> dependencies,
                     Optional<String> command,
@@ -50,11 +50,11 @@ public class RepoConfig {
     this.name = name;
   }
 
-  public String getSrcBranch() {
+  public Optional<String> getSrcBranch() {
     return srcBranch;
   }
 
-  public void setSrcBranch(String srcBranch) {
+  public void setSrcBranch(Optional<String> srcBranch) {
     this.srcBranch = srcBranch;
   }
 
