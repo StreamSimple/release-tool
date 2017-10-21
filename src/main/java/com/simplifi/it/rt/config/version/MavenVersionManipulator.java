@@ -2,9 +2,16 @@ package com.simplifi.it.rt.config.version;
 
 import com.google.common.base.Preconditions;
 import com.simplifi.it.javautil.err.ReturnError;
+import com.simplifi.it.javautil.err.ReturnErrorImpl;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MavenVersionManipulator implements VersionManipulator
 {
@@ -16,7 +23,15 @@ public class MavenVersionManipulator implements VersionManipulator
 
   @Override
   public Pair<String, ReturnError> getVersion() {
-    return null;
+    try {
+      MavenXpp3Reader reader = new MavenXpp3Reader();
+      Model model = reader.read(new FileReader(pomFile));
+      return new ImmutablePair<>(model.getVersion(), null);
+    } catch (XmlPullParserException | IOException e) {
+      String message =
+        String.format("Failed to read pom at %s with error: %s", pomFile.getAbsolutePath(), e.getMessage());
+      return new ImmutablePair<>(null, new ReturnErrorImpl(message));
+    }
   }
 
   @Override
