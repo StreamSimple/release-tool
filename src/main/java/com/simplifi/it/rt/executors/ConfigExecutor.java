@@ -1,8 +1,8 @@
 package com.simplifi.it.rt.executors;
 
 import com.google.common.base.Preconditions;
-import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.javautil.err.ReturnErrorImpl;
+import com.streamsimple.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnErrorImpl;
 import com.simplifi.it.rt.config.ConfigFile;
 import com.simplifi.it.rt.config.ProjectManager;
 import com.simplifi.it.rt.config.RepoConfig;

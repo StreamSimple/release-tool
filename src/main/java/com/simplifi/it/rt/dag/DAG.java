@@ -5,8 +5,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
-import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.javautil.err.ReturnErrorImpl;
+import com.streamsimple.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnErrorImpl;
 
 import java.util.*;
 

@@ -2,7 +2,7 @@ package com.simplifi.it.rt.main;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
-import com.simplifi.it.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnError;
 import com.simplifi.it.rt.executors.ConfigExecutor;
 
 public class BuildCommand extends AbstractBRCommand {

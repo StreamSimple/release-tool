@@ -4,7 +4,7 @@ import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Charsets;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.simplifi.it.javautils.testutils.DirTestWatcher;
+import com.streamsimple.javautils.testutils.DirTestWatcher;
 import com.simplifi.it.rt.executors.CommandExecutor;
 import com.simplifi.it.rt.executors.MockCommandExecutor;
 import com.simplifi.it.rt.module.TestModule;

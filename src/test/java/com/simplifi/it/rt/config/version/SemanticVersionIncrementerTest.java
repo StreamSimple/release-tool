@@ -1,6 +1,6 @@
 package com.simplifi.it.rt.config.version;
 
-import com.simplifi.it.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnError;
 import org.junit.Assert;
 import org.junit.Test;
 

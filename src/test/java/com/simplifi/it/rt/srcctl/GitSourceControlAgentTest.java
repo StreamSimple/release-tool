@@ -1,13 +1,11 @@
 package com.simplifi.it.rt.srcctl;
 
-import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.javautil.err.ReturnErrorImpl;
-import com.simplifi.it.javautils.testutils.DirTestWatcher;
+import com.streamsimple.javautil.err.ReturnError;
+import com.streamsimple.javautils.testutils.DirTestWatcher;
 import com.simplifi.it.rt.executors.ProcessCommandExecutor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.junit.Assert;

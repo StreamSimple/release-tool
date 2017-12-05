@@ -1,7 +1,7 @@
 package com.simplifi.it.rt.config.version;
 
 import com.google.common.base.Preconditions;
-import com.simplifi.it.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnError;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 

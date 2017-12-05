@@ -3,7 +3,7 @@ package com.simplifi.it.rt.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.simplifi.it.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnError;
 import com.simplifi.it.rt.dag.DAG;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;

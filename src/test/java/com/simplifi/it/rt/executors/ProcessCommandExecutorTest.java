@@ -1,7 +1,7 @@
 package com.simplifi.it.rt.executors;
 
-import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.javautils.testutils.DirTestWatcher;
+import com.streamsimple.javautil.err.ReturnError;
+import com.streamsimple.javautils.testutils.DirTestWatcher;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

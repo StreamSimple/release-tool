@@ -2,7 +2,7 @@ package com.simplifi.it.rt.dag;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.simplifi.it.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnError;
 import org.junit.Assert;
 import org.junit.Test;
 

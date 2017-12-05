@@ -1,7 +1,7 @@
 package com.simplifi.it.rt.config.version;
 
-import com.simplifi.it.javautil.err.ReturnError;
-import com.simplifi.it.javautil.err.ReturnErrorImpl;
+import com.streamsimple.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnErrorImpl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
