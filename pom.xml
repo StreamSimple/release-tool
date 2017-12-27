@@ -2,17 +2,22 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>com.streamsimple</groupId>
+    <artifactId>uber-deps</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
   <groupId>com.streamsimple</groupId>
   <artifactId>release-tool</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-
-  <name>release-tool</name>
-  <url>http://maven.apache.org</url>
+  <inceptionYear>2017</inceptionYear>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <testResources>${pom.basedir}/src/test/resources</testResources>
+    <java.version>1.8</java.version>
   </properties>
 
   <build>
@@ -26,11 +31,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -41,10 +41,22 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
 
   <dependencies>
+    <dependency>
+      <groupId>com.streamsimple.shade</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
       <artifactId>commons-cli</artifactId>
@@ -61,19 +73,16 @@
       <version>2.8.8</version>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
+      <groupId>com.streamsimple.shade</groupId>
       <artifactId>guava</artifactId>
-      <version>19.0</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
+      <groupId>com.streamsimple.shade</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.6</version>
     </dependency>
     <dependency>
       <groupId>com.streamsimple</groupId>
       <artifactId>javautil</artifactId>
-      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -83,12 +92,10 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.25</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.16.18</version>
     </dependency>
     <dependency>
       <groupId>com.beust</groupId>
@@ -113,8 +120,6 @@
     <dependency>
       <groupId>com.streamsimple</groupId>
       <artifactId>javautil-test</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

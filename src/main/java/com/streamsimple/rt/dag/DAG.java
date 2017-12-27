@@ -1,14 +1,34 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.streamsimple.rt.dag;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import com.streamsimple.guava.common.base.Preconditions;
+import com.streamsimple.guava.common.collect.HashMultimap;
+import com.streamsimple.guava.common.collect.Lists;
+import com.streamsimple.guava.common.collect.SetMultimap;
+import com.streamsimple.guava.common.collect.Sets;
 import com.streamsimple.javautil.err.ReturnError;
 import com.streamsimple.javautil.err.ReturnErrorImpl;
-
-import java.util.*;
 
 public class DAG<T> implements Cloneable
 {
@@ -31,7 +51,7 @@ public class DAG<T> implements Cloneable
 
   public ReturnError addEdge(Edge<T> edge)
   {
-    if(contains(edge)) {
+    if (contains(edge)) {
       return new ReturnErrorImpl("Contains edge: " + edge);
     }
 
@@ -183,10 +203,15 @@ public class DAG<T> implements Cloneable
   @Override
   public boolean equals(Object o)
   {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
 
-    DAG<?> that = (DAG<?>) o;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    DAG<?> that = (DAG<?>)o;
 
     return srcToDests.equals(that.srcToDests);
   }

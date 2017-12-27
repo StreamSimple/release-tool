@@ -1,18 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.streamsimple.rt.config;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.streamsimple.javautil.err.ReturnError;
-import com.streamsimple.javautil.err.ReturnErrorImpl;
-import com.streamsimple.rt.dag.DAG;
-import com.streamsimple.rt.dag.Edge;
-import com.streamsimple.rt.parse.ParseException;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +23,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.streamsimple.commons.lang3.StringUtils;
+import com.streamsimple.commons.lang3.tuple.ImmutablePair;
+import com.streamsimple.commons.lang3.tuple.Pair;
+import com.streamsimple.guava.common.base.Preconditions;
+import com.streamsimple.guava.common.collect.Lists;
+import com.streamsimple.guava.common.collect.Maps;
+import com.streamsimple.javautil.err.ReturnError;
+import com.streamsimple.javautil.err.ReturnErrorImpl;
+import com.streamsimple.rt.dag.DAG;
+import com.streamsimple.rt.dag.Edge;
+import com.streamsimple.rt.parse.ParseException;
 
 public class ConfigFile
 {
@@ -48,7 +65,8 @@ public class ConfigFile
     this.repoConfigs = repoConfigs;
   }
 
-  public DAG<RepoConfig> toDAG() {
+  public DAG<RepoConfig> toDAG()
+  {
     Pair<DAG<RepoConfig>, ReturnError> dagPair = createRepoConfigDAG(repoConfigs);
     DAG<RepoConfig> dag = dagPair.getLeft();
     ReturnError parseError = dagPair.getRight();
@@ -71,10 +89,15 @@ public class ConfigFile
   @Override
   public boolean equals(Object o)
   {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
 
-    ConfigFile that = (ConfigFile) o;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ConfigFile that = (ConfigFile)o;
 
     return repoConfigs.equals(that.repoConfigs);
   }
@@ -86,7 +109,8 @@ public class ConfigFile
   }
 
 
-  public static Pair<Map<String, RepoConfig>, ReturnError> createRepoConfigMap(List<RepoConfig> repoConfigs) {
+  public static Pair<Map<String, RepoConfig>, ReturnError> createRepoConfigMap(List<RepoConfig> repoConfigs)
+  {
     Map<String, RepoConfig> repoConfigMap = Maps.newHashMap();
     List<RepoConfig> duplicateRepoConfigs = Lists.newArrayList();
 
@@ -103,13 +127,13 @@ public class ConfigFile
     ReturnError parseError = null;
 
     if (!duplicateRepoConfigs.isEmpty()) {
-      List<String> repoNames = duplicateRepoConfigs.
-        stream().
-        map(repoConfig -> repoConfig.getName()).
-        collect(Collectors.toList());
+      List<String> repoNames = duplicateRepoConfigs
+          .stream()
+          .map(repoConfig -> repoConfig.getName())
+          .collect(Collectors.toList());
 
       String errMessage = "The following repo names were duplicated: " +
-        StringUtils.join(repoNames, ", ");
+          StringUtils.join(repoNames, ", ");
 
       parseError = new ReturnErrorImpl(errMessage);
       return new ImmutablePair<>(null, parseError);
@@ -118,7 +142,8 @@ public class ConfigFile
     }
   }
 
-  public static Pair<DAG<RepoConfig>, ReturnError> createRepoConfigDAG(List<RepoConfig> repoConfigs) {
+  public static Pair<DAG<RepoConfig>, ReturnError> createRepoConfigDAG(List<RepoConfig> repoConfigs)
+  {
     Pair<Map<String, RepoConfig>, ReturnError> repoConfigMapPair = createRepoConfigMap(repoConfigs);
     Map<String, RepoConfig> repoConfigMap = repoConfigMapPair.getLeft();
     ReturnError parseError = repoConfigMapPair.getRight();
@@ -148,10 +173,10 @@ public class ConfigFile
     });
 
     if (!dagErrors.isEmpty()) {
-      List<String> dagErrorMessages = dagErrors.
-        stream().
-        map(error -> error.getMessage()).
-        collect(Collectors.toList());
+      List<String> dagErrorMessages = dagErrors
+          .stream()
+          .map(error -> error.getMessage())
+          .collect(Collectors.toList());
 
       String errMessage = "DAG creation errors:\n" + StringUtils.join(dagErrorMessages, "\n");
       return new ImmutablePair<>(null, new ReturnErrorImpl(errMessage));
@@ -196,7 +221,7 @@ public class ConfigFile
     Iterator<RepoConfig> repoIterator = repoConfigs.iterator();
     String projectType = repoIterator.next().getProjectType();
 
-    while(repoIterator.hasNext()) {
+    while (repoIterator.hasNext()) {
       RepoConfig repoConfig = repoIterator.next();
 
       if (!projectType.equals(repoConfig.getProjectType())) {
