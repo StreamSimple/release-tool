@@ -1,17 +1,8 @@
-## Building
+# Release Tool [![Build Status](https://travis-ci.org/StreamSimple/release-tool.svg?branch=master)](https://travis-ci.org/StreamSimple/release-tool)
 
-### Pre-requisites
+This is a tool to help coordinate released between multiple repositories.
 
-   1 Install java 8
-   1 Install mvn
-   1 Set the environment variable <b>JAVA8_HOME</b> to point to the home directory of your java 8 installation
+# Dev Setup
 
-### Build
+Please follow the instructions [here](https://github.com/StreamSimple/uber-poms/wiki/Building-Projects).
 
-Use the dvn script in the project to do builds. It simply passes all your args to mvn and sets the JAVA8_HOME variable in your bash_profile file to JAVA_HOME
-
-Ex.
-
-```
-./dvn clean install
-```
